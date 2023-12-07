@@ -1,5 +1,5 @@
 ﻿using Domain.Entities;
-using DomainServices.Repositories.Common;
+using DomainServices.Common;
 
 namespace DomainServices.Repositories
 {
