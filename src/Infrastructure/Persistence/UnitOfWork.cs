@@ -24,16 +24,16 @@ namespace Infrastructure.Persistence
 
         private void SetRepositories()
         {
-            var propsInfo = GetType().GetProperties();
-            var assembly = Assembly.GetExecutingAssembly();
+            var propsInfo = GetType().GetProperties()
+                .Where(x => x.PropertyType.GetInterfaces().Any(y => y.IsGenericType && y.GetGenericTypeDefinition() == typeof(IRepository<>)));
 
-            var reposClasses = assembly.GetTypes()
-                .Where(x => x.IsClass && x.IsAssignableTo(typeof(IRepository<>)));
+            var assembly = Assembly.GetExecutingAssembly();
 
             foreach (var propInfo in propsInfo)
             {
-                var repoClass = reposClasses
-                    .FirstOrDefault(x => x.IsAssignableTo(propInfo.PropertyType));
+                var repoClass = assembly.GetTypes()
+                    .Where(x => x.IsClass && x.IsAssignableTo(propInfo.PropertyType))
+                    .FirstOrDefault();
 
                 if (repoClass != null)
                 {
