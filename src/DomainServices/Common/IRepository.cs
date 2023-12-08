@@ -29,14 +29,6 @@ namespace DomainServices.Common
         Task<List<T>> FindAllAsync(Expression<Func<T, bool>> predicate, CancellationToken cancellationToken = default);
 
         /// <summary>
-        /// Marca la entidad para ser actualizada al ejecutar SaveChangesAsync
-        /// </summary>
-        /// <param name="entity">Objeto a actualizar</param>
-        /// <param name="cancellationToken">Token de cancelación</param>
-        /// <returns></returns>
-        Task UpdateAsync(T entity, CancellationToken cancellationToken = default);
-
-        /// <summary>
         /// Marca una entidad para su eliminación al ejecutar SaveChangesAsync
         /// </summary>
         /// <param name="entity">Objeto a eliminar</param>
