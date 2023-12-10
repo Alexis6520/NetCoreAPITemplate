@@ -4,9 +4,10 @@ using System.Text.Json;
 
 namespace API.Middlewares
 {
-    public class ErrorHandlerMiddleware(RequestDelegate next)
+    public class ErrorHandlerMiddleware(RequestDelegate next, ILogger<ErrorHandlerMiddleware> logger)
     {
         private readonly RequestDelegate _next = next;
+        private readonly ILogger<ErrorHandlerMiddleware> _logger = logger;
 
         public async Task Invoke(HttpContext context)
         {
@@ -20,7 +21,7 @@ namespace API.Middlewares
             }
         }
 
-        private static async Task HandleError(Exception ex, HttpContext context)
+        private async Task HandleError(Exception ex, HttpContext context)
         {
             ErrorResponse body;
             int statusCode;
@@ -32,8 +33,10 @@ namespace API.Middlewares
             }
             else
             {
-                body = new ErrorResponse("Error en el servidor.", null);
+                var message = $"Error {Guid.NewGuid()}.";
+                body = new ErrorResponse(message, null);
                 statusCode = StatusCodes.Status500InternalServerError;
+                _logger.LogError(ex, "{message}", message);
             }
 
             context.Response.ContentType = "application/json";
