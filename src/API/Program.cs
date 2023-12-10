@@ -1,4 +1,5 @@
 using API;
+using API.Middlewares;
 using ApplicationServices;
 using Infrastructure;
 
@@ -17,7 +18,7 @@ builder.Services.AddSwaggerGen();
 var app = builder.Build();
 
 // Descomenta esto para aplicar las migraciones automáticamente
-//await app.InitializeDatabaseAsync();
+await app.InitializeDatabaseAsync();
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
@@ -27,9 +28,7 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
-
 app.UseAuthorization();
-
+app.UseMiddleware<ErrorHandlerMiddleware>();
 app.MapControllers();
-
 app.Run();
