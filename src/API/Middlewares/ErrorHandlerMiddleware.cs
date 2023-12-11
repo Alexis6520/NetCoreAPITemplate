@@ -34,7 +34,7 @@ namespace API.Middlewares
             else
             {
                 var message = $"Error {Guid.NewGuid()}.";
-                body = new ErrorResponse(message, null);
+                body = new ErrorResponse(message);
                 statusCode = StatusCodes.Status500InternalServerError;
                 _logger.LogError(ex, "{message}", message);
             }
