@@ -1,4 +1,5 @@
-﻿using DomainServices.Common;
+﻿using AutoMapper;
+using DomainServices.Common;
 using DomainServices.Repositories;
 using DomainServices.Services;
 using System.Reflection;
@@ -8,10 +9,12 @@ namespace Infrastructure.Persistence
     public class UnitOfWork : IUnitOfWork
     {
         private readonly ApplicationDbContext _dbContext;
+        private readonly IMapper _mapper;
 
-        public UnitOfWork(ApplicationDbContext dbContext)
+        public UnitOfWork(ApplicationDbContext dbContext, IMapper mapper)
         {
             _dbContext = dbContext;
+            _mapper = mapper;
             SetRepositories();
         }
 
@@ -37,7 +40,7 @@ namespace Infrastructure.Persistence
 
                 if (repoClass != null)
                 {
-                    object repoInstance = Activator.CreateInstance(repoClass, _dbContext);
+                    object repoInstance = Activator.CreateInstance(repoClass, _dbContext, _mapper);
                     propInfo.SetValue(this, repoInstance);
                 }
             }

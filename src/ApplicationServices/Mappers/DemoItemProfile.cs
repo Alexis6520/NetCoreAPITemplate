@@ -1,6 +1,7 @@
 ﻿using ApplicationServices.Commands.DemoItemCommands;
 using AutoMapper;
 using Domain.Entities;
+using DomainServices.DTOs.DemoItemDTOs;
 
 namespace ApplicationServices.Mappers
 {
@@ -9,6 +10,7 @@ namespace ApplicationServices.Mappers
         public DemoItemProfile()
         {
             CreateMap<CreateDemoItemCommand, DemoItem>();
+            CreateMap<DemoItem, DemoItemSearchDTO>();
         }
     }
 }
