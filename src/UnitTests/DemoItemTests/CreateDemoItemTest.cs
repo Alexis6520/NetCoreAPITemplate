@@ -7,7 +7,7 @@ using DomainServices.Services;
 using Microsoft.Extensions.Logging;
 using Moq;
 
-namespace UnitTests
+namespace UnitTests.DemoItemTests
 {
     [TestClass]
     public class CreateDemoItemTest
