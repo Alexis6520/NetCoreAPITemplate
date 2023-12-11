@@ -26,17 +26,23 @@ namespace API.Middlewares
             ErrorResponse body;
             int statusCode;
 
-            if (ex is CustomException e)
+            switch (ex)
             {
-                body = new ErrorResponse(e.Message, e.Errors);
-                statusCode = (int)e.StatusCode;
-            }
-            else
-            {
-                var message = $"Error {Guid.NewGuid()}.";
-                body = new ErrorResponse(message);
-                statusCode = StatusCodes.Status500InternalServerError;
-                _logger.LogError(ex, "{message}", message);
+                case ValidationException e:
+                    body = new ErrorResponse(e.Message, e.Errors);
+                    statusCode = (int)e.StatusCode;
+
+                    break;
+                case CustomException e:
+                    body = new ErrorResponse(e.Message);
+                    statusCode = (int)e.StatusCode;
+                    break;
+                default:
+                    var message = $"Error {Guid.NewGuid()}.";
+                    body = new ErrorResponse(message);
+                    statusCode = StatusCodes.Status500InternalServerError;
+                    _logger.LogError(ex, "{message}", message);
+                    break;
             }
 
             context.Response.ContentType = "application/json";

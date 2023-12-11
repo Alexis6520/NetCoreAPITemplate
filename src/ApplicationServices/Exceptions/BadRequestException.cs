@@ -2,7 +2,7 @@
 
 namespace ApplicationServices.Exceptions
 {
-    public class BadRequestException(string message, IEnumerable<Error> errors = null) : CustomException(message, HttpStatusCode.BadRequest, errors)
+    public class BadRequestException(string message) : CustomException(message, HttpStatusCode.BadRequest)
     {
     }
 }

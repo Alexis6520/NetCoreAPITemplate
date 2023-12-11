@@ -19,7 +19,7 @@ namespace ApplicationServices.Behaviors
                 if (failures.Any())
                 {
                     var errors = failures.Select(x => new Error(x.ErrorCode, x.ErrorMessage));
-                    throw new BadRequestException("Se han producido uno o más errores de validación.", errors);
+                    throw new Exceptions.ValidationException("Se han producido uno o más errores de validación.", errors);
                 }
             }
 
