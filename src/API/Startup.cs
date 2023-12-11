@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
+using System.Reflection;
 using System.Text;
 using System.Text.Json;
 
@@ -91,6 +92,8 @@ namespace API
                 });
 
                 x.AddSecurityRequirement(CreateApiSecurityRequirement());
+                var xmlFilename = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
+                x.IncludeXmlComments(Path.Combine(AppContext.BaseDirectory, xmlFilename));
             });
 
             return services;
