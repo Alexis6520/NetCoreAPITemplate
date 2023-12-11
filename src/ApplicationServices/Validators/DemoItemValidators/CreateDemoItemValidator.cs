@@ -1,7 +1,7 @@
 ﻿using ApplicationServices.Commands.DemoItemCommands;
 using FluentValidation;
 
-namespace ApplicationServices.Validators
+namespace ApplicationServices.Validators.DemoItemValidators
 {
     public class CreateDemoItemValidator : AbstractValidator<CreateDemoItemCommand>
     {
@@ -11,7 +11,7 @@ namespace ApplicationServices.Validators
                 .NotEmpty().WithErrorCode("NameEmpty").WithMessage("El nombre es obligatorio.")
                 .MaximumLength(50).WithErrorCode("LengthExceeded").WithMessage("El nombre no puede superar los {MaxLength} caracteres.");
 
-            RuleFor(x=> x.Description)
+            RuleFor(x => x.Description)
                 .MaximumLength(600).WithErrorCode("LengthExceeded").WithMessage("La descripción no puede superar los {MaxLength} caracteres.");
 
             RuleFor(x => x.Price)

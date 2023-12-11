@@ -1,6 +1,6 @@
 using ApplicationServices.Commands.DemoItemCommands;
 using ApplicationServices.Handlers.DemoItemHandlers;
-using ApplicationServices.Validators;
+using ApplicationServices.Validators.DemoItemValidators;
 using AutoMapper;
 using Domain.Entities;
 using DomainServices.Services;
