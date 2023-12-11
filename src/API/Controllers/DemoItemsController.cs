@@ -1,12 +1,14 @@
 ﻿using API.Wrappers;
 using ApplicationServices.Commands.DemoItemCommands;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace API.Controllers
 {
     [Route("[controller]")]
     [ApiController]
+    [Authorize]
     public class DemoItemsController(IMediator mediator) : ControllerBase
     {
         private readonly IMediator _mediator = mediator;

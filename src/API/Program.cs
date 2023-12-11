@@ -13,15 +13,16 @@ try
 
     builder.Services
         .AddApplicationServices()
-        .AddInfrastructure(builder.Configuration);
+        .AddInfrastructure(builder.Configuration)
+        .AddAuthentication(builder.Configuration);
 
     builder.Services.AddControllers();
     builder.Services.AddEndpointsApiExplorer();
-    builder.Services.AddSwaggerGen();
+    builder.Services.AddSwagger();
     builder.Logging.ClearProviders();
     builder.Host.UseNLog();
     var app = builder.Build();
-    await app.InitializeDatabaseAsync();
+    //await app.InitializeDatabaseAsync();
 
     if (app.Environment.IsDevelopment())
     {
@@ -42,7 +43,7 @@ try
 catch (Exception ex)
 {
     logger.Fatal(ex, "Error al iniciar.");
-	throw;
+    throw;
 }
 finally
 {
