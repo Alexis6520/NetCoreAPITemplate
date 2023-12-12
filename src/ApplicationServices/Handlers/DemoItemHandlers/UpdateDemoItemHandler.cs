@@ -7,7 +7,7 @@ namespace ApplicationServices.Handlers.DemoItemHandlers
 {
     public class UpdateDemoItemHandler(IUnitOfWork context) : IRequestHandler<UpdateDemoItemCommand>
     {
-        private readonly IUnitOfWork _context = context;
+        private IUnitOfWork _context = context;
 
         public async Task Handle(UpdateDemoItemCommand request, CancellationToken cancellationToken)
         {

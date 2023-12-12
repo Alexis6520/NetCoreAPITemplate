@@ -9,9 +9,15 @@ using Moq;
 namespace UnitTests.DemoItemTests
 {
     [TestClass]
-    public class UpdateDemoItemTests
+    public class UpdateDemoItemTest
     {
         private readonly Mock<IUnitOfWork> _contextMock = new();
+        private readonly UpdateDemoItemHandler _handler;
+
+        public UpdateDemoItemTest()
+        {
+            _handler = new(_contextMock.Object);
+        }
 
         private static IEnumerable<object[]> ValidationTestData
         {
@@ -58,8 +64,7 @@ namespace UnitTests.DemoItemTests
             _contextMock.Setup(x => x.DemoItems.FindAsync(x => x.Id == command.Id, default))
                 .ReturnsAsync(demoItem);
 
-            var handler = new UpdateDemoItemHandler(_contextMock.Object);
-            await handler.Handle(command, default);
+            await _handler.Handle(command, default);
             Assert.IsTrue(EntityUpdated(demoItem, command));
         }
 
@@ -79,8 +84,7 @@ namespace UnitTests.DemoItemTests
             _contextMock.Setup(x => x.DemoItems.FindAsync(x => x.Id == command.Id, default))
                 .ReturnsAsync(demoItem);
 
-            var handler = new UpdateDemoItemHandler(_contextMock.Object);
-            await handler.Handle(command, default);
+            await _handler.Handle(command, default);
         }
 
         private static bool EntityUpdated(DemoItem entity, UpdateDemoItemCommand command)

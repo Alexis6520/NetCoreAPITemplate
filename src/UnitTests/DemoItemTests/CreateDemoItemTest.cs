@@ -15,6 +15,12 @@ namespace UnitTests.DemoItemTests
         private readonly Mock<IUnitOfWork> _contextMock = new();
         private readonly Mock<IMapper> _mapperMock = new();
         private readonly Mock<ILogger<CreateDemoItemHandler>> _loggerMock = new();
+        private readonly CreateDemoItemHandler _handler;
+
+        public CreateDemoItemTest()
+        {
+            _handler = new(_contextMock.Object, _mapperMock.Object, _loggerMock.Object);
+        }
 
         private static IEnumerable<object[]> ValidationTestData
         {
@@ -48,8 +54,7 @@ namespace UnitTests.DemoItemTests
             var demoItem = new DemoItem();
             _mapperMock.Setup(x => x.Map<DemoItem>(command)).Returns(demoItem);
             _contextMock.Setup(x => x.DemoItems.AddAsync(demoItem, default)).Returns(Task.CompletedTask);
-            var handler = new CreateDemoItemHandler(_contextMock.Object, _mapperMock.Object, _loggerMock.Object);
-            await handler.Handle(command, default);
+            await _handler.Handle(command, default);
         }
     }
 }
