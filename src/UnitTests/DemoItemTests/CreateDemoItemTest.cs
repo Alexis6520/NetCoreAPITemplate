@@ -12,16 +12,9 @@ namespace UnitTests.DemoItemTests
     [TestClass]
     public class CreateDemoItemTest
     {
-        private readonly Mock<IUnitOfWork> _contextMock;
-        private readonly Mock<IMapper> _mapperMock;
-        private readonly Mock<ILogger<CreateDemoItemHandler>> _loggerMock;
-
-        public CreateDemoItemTest()
-        {
-            _contextMock = new Mock<IUnitOfWork>();
-            _loggerMock = new Mock<ILogger<CreateDemoItemHandler>>();
-            _mapperMock = new Mock<IMapper>();
-        }
+        private readonly Mock<IUnitOfWork> _contextMock = new();
+        private readonly Mock<IMapper> _mapperMock = new();
+        private readonly Mock<ILogger<CreateDemoItemHandler>> _loggerMock = new();
 
         private static IEnumerable<object[]> ValidationTestData
         {

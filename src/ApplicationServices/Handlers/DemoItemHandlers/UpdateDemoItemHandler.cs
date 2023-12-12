@@ -14,7 +14,7 @@ namespace ApplicationServices.Handlers.DemoItemHandlers
             var demoItem = await _context.DemoItems
                 .FindAsync(x => x.Id == request.Id, cancellationToken);
 
-            _ = demoItem ?? throw new NotFoundException("Articulo demo no encontrado.");
+            _ = demoItem ?? throw new NotFoundException("Artículo demo no encontrado.");
             demoItem.Name = request.Name;
             demoItem.Description = request.Description;
             demoItem.Price = request.Price;
