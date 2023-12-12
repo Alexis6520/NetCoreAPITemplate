@@ -10,7 +10,7 @@ namespace API.Controllers
 {
     [Route("[controller]")]
     [ApiController]
-    [Authorize]
+    //[Authorize]
     public class DemoItemsController(IMediator mediator, IUnitOfWork context) : ControllerBase
     {
         private readonly IMediator _mediator = mediator;
@@ -40,6 +40,21 @@ namespace API.Controllers
             var results = await _context.DemoItems.SearchAsync(text);
             var response = new Response<List<DemoItemSearchDTO>>(results);
             return Ok(response);
+        }
+
+        /// <summary>
+        /// Actualiza un artículo demo
+        /// </summary>
+        /// <param name="id">Id de artículo</param>
+        /// <param name="command"></param>
+        /// <returns></returns>
+        [HttpPut("{id}")]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        public async Task<IActionResult> UpdateAsync(int id, UpdateDemoItemCommand command)
+        {
+            command.Id = id;
+            await _mediator.Send(command);
+            return NoContent();
         }
     }
 }
