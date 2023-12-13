@@ -10,7 +10,7 @@ namespace API.Controllers
 {
     [Route("[controller]")]
     [ApiController]
-    //[Authorize]
+    [Authorize]
     public class DemoItemsController(IMediator mediator, IUnitOfWork context) : ControllerBase
     {
         private readonly IMediator _mediator = mediator;
