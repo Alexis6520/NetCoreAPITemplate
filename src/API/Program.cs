@@ -22,7 +22,7 @@ try
     builder.Logging.ClearProviders();
     builder.Host.UseNLog();
     var app = builder.Build();
-    await app.InitializeDatabaseAsync();
+    //await app.InitializeDatabaseAsync();
 
     if (app.Environment.IsDevelopment())
     {

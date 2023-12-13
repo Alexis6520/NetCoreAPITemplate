@@ -56,5 +56,19 @@ namespace API.Controllers
             await _mediator.Send(command);
             return NoContent();
         }
+
+        /// <summary>
+        /// Elimina un artículo demo
+        /// </summary>
+        /// <param name="id">Id de artículo</param>
+        /// <returns></returns>
+        [HttpDelete("{id}")]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        public async Task<IActionResult> DeleteAsync(int id)
+        {
+            var command = new DeleteDemoItemCommand { Id = id };
+            await _mediator.Send(command);
+            return NoContent();
+        }
     }
 }
