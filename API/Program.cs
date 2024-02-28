@@ -2,6 +2,7 @@ using Logic;
 using Infrastructure.Persistence;
 using API;
 using System.Reflection;
+using API.Middlewares;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -29,11 +30,9 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
+app.UseMiddleware<ErrorHandlerMiddleware>();
 app.UseHttpsRedirection();
-
 app.UseAuthorization();
-
 app.MapControllers();
-
 await app.InitializeDatabaseAsync();
 app.Run();
