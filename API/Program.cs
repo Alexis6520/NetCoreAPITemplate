@@ -1,5 +1,6 @@
 using Logic;
 using Infrastructure.Persistence;
+using API;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -28,4 +29,5 @@ app.UseAuthorization();
 
 app.MapControllers();
 
+await app.InitializeDatabaseAsync();
 app.Run();

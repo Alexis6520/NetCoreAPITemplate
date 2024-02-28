@@ -1,5 +1,6 @@
 ﻿using Services;
 using Services.Repositories;
+using System.Reflection;
 
 namespace Infrastructure.Persistence
 {
@@ -18,11 +19,13 @@ namespace Infrastructure.Persistence
         private void SetRepositories()
         {
             var props = GetType().GetProperties();
-            var repoProps = props.Where(x => x.PropertyType.IsAssignableTo(typeof(IRepository<>)));
+            var repoProps = props.Where(x => x.PropertyType.GetInterfaces().Any(y => y.IsGenericType && y.GetGenericTypeDefinition() == typeof(IRepository<>)));
+            var assemblyTypes = Assembly.GetExecutingAssembly().GetTypes();
 
             foreach (var repoProp in repoProps)
             {
-                var repo = Activator.CreateInstance(repoProp.PropertyType, _dbContext);
+                var repoClass = assemblyTypes.First(x => x.IsClass && x.IsAssignableTo(repoProp.PropertyType));
+                var repo = Activator.CreateInstance(repoClass, _dbContext);
                 repoProp.SetValue(this, repo);
             }
         }
