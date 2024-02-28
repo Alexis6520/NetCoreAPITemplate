@@ -10,11 +10,18 @@ namespace API.Controllers
     {
         private readonly IMediator _mediator = mediator;
 
+        /// <summary>
+        /// Crea un artículo demo
+        /// </summary>
+        /// <param name="command"></param>
+        /// <param name="cancellationToken"></param>
+        /// <returns></returns>
         [HttpPost]
-        public async Task<ActionResult<int>> CreateAsync(DemoItemCreateCommand command, CancellationToken cancellationToken = default)
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        public async Task<IActionResult> CreateAsync(DemoItemCreateCommand command, CancellationToken cancellationToken = default)
         {
-            var id = await _mediator.Send(command, cancellationToken);
-            return Ok(id);
+            await _mediator.Send(command, cancellationToken);
+            return NoContent();
         }
     }
 }

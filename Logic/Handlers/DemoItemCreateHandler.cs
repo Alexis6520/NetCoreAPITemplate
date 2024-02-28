@@ -5,11 +5,11 @@ using Services;
 
 namespace Logic.Handlers
 {
-    public class DemoItemCreateHandler(IUnitOfWork unitOfWork) : IRequestHandler<DemoItemCreateCommand, int>
+    public class DemoItemCreateHandler(IUnitOfWork unitOfWork) : IRequestHandler<DemoItemCreateCommand>
     {
         private readonly IUnitOfWork _unitOfWork = unitOfWork;
 
-        public async Task<int> Handle(DemoItemCreateCommand request, CancellationToken cancellationToken)
+        public async Task Handle(DemoItemCreateCommand request, CancellationToken cancellationToken)
         {
             /*
                 Código con vainas lógicas y reglas de negocio 
@@ -18,7 +18,6 @@ namespace Logic.Handlers
             var demoItem = new DemoItem(request.Name, request.Price);
             await _unitOfWork.Items.AddAsync(demoItem, cancellationToken);
             await _unitOfWork.SaveChangesAsync(cancellationToken);
-            return demoItem.Id;
         }
     }
 }
