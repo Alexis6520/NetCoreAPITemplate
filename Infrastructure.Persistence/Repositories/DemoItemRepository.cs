@@ -28,5 +28,10 @@ namespace Infrastructure.Persistence.Repositories
         {
             return await _dbContext.DemoItems.FindAsync(id, cancellationToken);
         }
+
+        public void Remove(DemoItem entity)
+        {
+            _dbContext.DemoItems.Remove(entity);
+        }
     }
 }

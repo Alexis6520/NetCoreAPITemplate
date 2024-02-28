@@ -4,5 +4,6 @@
     {
         Task AddAsync(T entity, CancellationToken cancellationToken = default);
         Task<T> GetAsync(object[] id, CancellationToken cancellationToken = default);
+        void Remove(T entity);
     }
 }
