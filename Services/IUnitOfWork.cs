@@ -4,7 +4,7 @@ namespace Services
 {
     public interface IUnitOfWork
     {
-        IDemoItemRepository Items { get; }
+        IDemoItemRepository DemoItems { get; }
         Task SaveChangesAsync(CancellationToken cancellationToken = default);
     }
 }

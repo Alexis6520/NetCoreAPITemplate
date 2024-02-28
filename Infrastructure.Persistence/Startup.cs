@@ -5,7 +5,7 @@ using Services;
 
 namespace Infrastructure.Persistence
 {
-    public static class ServiceExtensions
+    public static class Startup
     {
         public static IServiceCollection AddPersistence(this IServiceCollection services,IConfiguration configuration)
         {

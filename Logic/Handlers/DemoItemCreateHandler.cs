@@ -16,7 +16,7 @@ namespace Logic.Handlers
              */
 
             var demoItem = new DemoItem(request.Name, request.Price);
-            await _unitOfWork.Items.AddAsync(demoItem, cancellationToken);
+            await _unitOfWork.DemoItems.AddAsync(demoItem, cancellationToken);
             await _unitOfWork.SaveChangesAsync(cancellationToken);
         }
     }

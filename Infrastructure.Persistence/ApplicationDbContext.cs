@@ -6,7 +6,7 @@ namespace Infrastructure.Persistence
 {
     public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : DbContext(options)
     {
-        public DbSet<DemoItem> Items { get; set; }
+        public DbSet<DemoItem> DemoItems { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
