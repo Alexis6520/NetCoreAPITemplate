@@ -6,9 +6,9 @@
         public IEnumerable<Error> Errors { get; set; }
     }
 
-    public class Error
+    public class Error(string code, string message)
     {
-        public string Code { get; set; }
-        public string Message { get; set; }
+        public string Code { get; set; } = code;
+        public string Message { get; set; } = message;
     }
 }

@@ -1,5 +1,6 @@
 ﻿using API.Responses;
 using Logic.Exceptions;
+using System.Net;
 using System.Text.Json;
 
 namespace API.Middlewares
@@ -27,6 +28,11 @@ namespace API.Middlewares
                         response.StatusCode = (int)e.StatusCode;
                         responseModel.Message = e.Message;
                         _logger.LogWarning("{Message}", e.Message);
+                        break;
+                    case ValidationException e:
+                        response.StatusCode = (int)HttpStatusCode.BadRequest;
+                        responseModel.Message = e.Message;
+                        responseModel.Errors = e.Failures.Select(x => new Error(x.Code, x.Message));
                         break;
                     default:
                         response.StatusCode = StatusCodes.Status500InternalServerError;
