@@ -1,14 +1,14 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using System.Reflection;
 
-namespace Logic
+namespace Infrastructure
 {
     public static class Startup
     {
-        public static IServiceCollection AddLogicalServices(this IServiceCollection services)
+        public static IServiceCollection AddInfrastructure(this IServiceCollection services)
         {
             var assembly = Assembly.GetExecutingAssembly();
-            services.AddMediatR(config => config.RegisterServicesFromAssembly(assembly));
+            services.AddAutoMapper(assembly);
             return services;
         }
     }
