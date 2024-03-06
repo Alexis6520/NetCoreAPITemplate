@@ -1,9 +1,9 @@
 ﻿namespace API.Responses
 {
-    public class ErrorResponse
+    public class ErrorResponse(string message, IEnumerable<Error> errors = null)
     {
-        public string Message { get; set; }
-        public IEnumerable<Error> Errors { get; set; }
+        public string Message { get; set; } = message;
+        public IEnumerable<Error> Errors { get; set; } = errors;
     }
 
     public class Error(string code, string message)
