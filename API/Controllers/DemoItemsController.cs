@@ -1,5 +1,6 @@
 ﻿using Logic.Commands;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Services;
 using Services.DTOs;
@@ -8,6 +9,7 @@ namespace API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize] // Comenta esta línea pa probar los endpoints
     public class DemoItemsController(IMediator mediator, IUnitOfWork unitOfWork) : ControllerBase
     {
         private readonly IMediator _mediator = mediator;

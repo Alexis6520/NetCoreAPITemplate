@@ -17,15 +17,10 @@ try
         .AddLogicalServices()
         .AddInfrastructure()
         .AddPersistence(builder.Configuration)
+        .AddJWTAuthentication(builder.Configuration)
+        .AddSwagger()
+        .AddEndpointsApiExplorer()
         .AddControllers();
-
-    builder.Services.AddEndpointsApiExplorer();
-
-    builder.Services.AddSwaggerGen(options =>
-    {
-        var xmlFilename = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
-        options.IncludeXmlComments(Path.Combine(AppContext.BaseDirectory, xmlFilename));
-    });
 
     builder.Logging.ClearProviders();
     builder.Host.UseNLog();
@@ -40,6 +35,7 @@ try
     app.UseMiddleware<NLogRequestPostedBodyMiddleware>(new NLogRequestPostedBodyMiddlewareOptions());
     app.UseMiddleware<ErrorHandlerMiddleware>();
     app.UseHttpsRedirection();
+    app.UseAuthentication();
     app.UseAuthorization();
     app.MapControllers();
     await app.InitializeDatabaseAsync();
