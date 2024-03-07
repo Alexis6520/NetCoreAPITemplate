@@ -2,7 +2,7 @@
 using Domain;
 using Services.DTOs;
 
-namespace Infrastructure.Mappers
+namespace Logic.Mappers
 {
     public class DemoItemProfile : Profile
     {

@@ -14,7 +14,8 @@ namespace Logic
 
             services.AddMediatR(config => config.RegisterServicesFromAssembly(assembly))
                     .AddValidatorsFromAssembly(assembly)
-                    .AddTransient(typeof(IPipelineBehavior<,>), typeof(ValidationBehavior<,>));
+                    .AddTransient(typeof(IPipelineBehavior<,>), typeof(ValidationBehavior<,>))
+                    .AddAutoMapper(assembly);
 
             return services;
         }

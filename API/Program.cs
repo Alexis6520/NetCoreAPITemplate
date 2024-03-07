@@ -1,11 +1,9 @@
 using Logic;
 using Infrastructure.Persistence;
 using API;
-using System.Reflection;
 using API.Middlewares;
 using NLog;
 using NLog.Web;
-using Infrastructure;
 
 var logger = LogManager.Setup().LoadConfigurationFromAppSettings().GetCurrentClassLogger();
 
@@ -15,7 +13,6 @@ try
 
     builder.Services
         .AddLogicalServices()
-        .AddInfrastructure()
         .AddPersistence(builder.Configuration)
         .AddJWTAuthentication(builder.Configuration)
         .AddSwagger()
