@@ -3,11 +3,11 @@ using System.Text.Json.Serialization;
 
 namespace Logic.Commands
 {
-    public class DemoItemUpdateCommand : IRequest
+    public class DemoItemUpdateCommand(string name,decimal price) : IRequest
     {
         [JsonIgnore]
         public int Id { get; set; }
-        public string Name { get; set; }
-        public decimal Price { get; set; }
+        public string Name { get; set; } = name;
+        public decimal Price { get; set; } = price;
     }
 }
