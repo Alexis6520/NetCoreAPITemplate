@@ -25,8 +25,8 @@ namespace API.Controllers
         [ProducesResponseType(StatusCodes.Status201Created)]
         public async Task<IActionResult> CreateAsync(DemoItemCreateCommand command, CancellationToken cancellationToken = default)
         {
-            await _mediator.Send(command, cancellationToken);
-            return StatusCode(StatusCodes.Status201Created);
+            var id = await _mediator.Send(command, cancellationToken);
+            return Created("",id);
         }
 
         /// <summary>

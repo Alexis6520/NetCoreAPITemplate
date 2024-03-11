@@ -2,7 +2,7 @@
 using Logic.Commands.DemoItemCommands;
 using Logic.Exceptions;
 using Logic.Handlers.DemoItemHandlers;
-using Logic.Validators;
+using Logic.Validators.DemoItemValidators;
 using Microsoft.Extensions.Logging;
 using Moq;
 using Services;

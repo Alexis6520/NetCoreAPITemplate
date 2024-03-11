@@ -1,12 +1,12 @@
 ﻿using Domain;
 using Logic.Exceptions;
-using Logic.Validators;
 using Moq;
 using Services.Repositories;
 using Services;
 using Microsoft.Extensions.Logging;
 using Logic.Commands.DemoItemCommands;
 using Logic.Handlers.DemoItemHandlers;
+using Logic.Validators.DemoItemValidators;
 
 namespace Infrastructure.UnitTests.DemoItemTests
 {
@@ -23,7 +23,7 @@ namespace Infrastructure.UnitTests.DemoItemTests
             {
                 return new[]
                 {
-                    new[] { new DemoItemDeleteCommand { Id=0} },
+                    [new DemoItemDeleteCommand { Id=0}],
                     new[] { new DemoItemDeleteCommand { Id=-1} },
                 };
             }
