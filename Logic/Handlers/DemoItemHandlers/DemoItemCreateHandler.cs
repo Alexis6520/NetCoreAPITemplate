@@ -1,10 +1,10 @@
 ﻿using Domain;
-using Logic.Commands;
+using Logic.Commands.DemoItemCommands;
 using MediatR;
 using Microsoft.Extensions.Logging;
 using Services;
 
-namespace Logic.Handlers
+namespace Logic.Handlers.DemoItemHandlers
 {
     public class DemoItemCreateHandler(IUnitOfWork unitOfWork, ILogger<DemoItemCreateHandler> logger) : IRequestHandler<DemoItemCreateCommand>
     {

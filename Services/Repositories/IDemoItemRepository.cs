@@ -1,5 +1,5 @@
 ﻿using Domain;
-using Services.DTOs;
+using Services.DTOs.DemoItemDTOs;
 
 namespace Services.Repositories
 {

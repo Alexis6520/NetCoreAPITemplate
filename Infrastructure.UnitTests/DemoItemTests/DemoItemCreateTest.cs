@@ -1,12 +1,12 @@
-using Logic.Commands;
-using Logic.Handlers;
+using Logic.Commands.DemoItemCommands;
+using Logic.Handlers.DemoItemHandlers;
 using Logic.Validators;
 using Microsoft.Extensions.Logging;
 using Moq;
 using Services;
 using Services.Repositories;
 
-namespace Infrastructure.UnitTests
+namespace Infrastructure.UnitTests.DemoItemTests
 {
     [TestClass]
     public class DemoItemCreateTest

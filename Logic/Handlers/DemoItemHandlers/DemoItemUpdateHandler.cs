@@ -1,10 +1,10 @@
-﻿using Logic.Commands;
+﻿using Logic.Commands.DemoItemCommands;
 using Logic.Exceptions;
 using MediatR;
 using Microsoft.Extensions.Logging;
 using Services;
 
-namespace Logic.Handlers
+namespace Logic.Handlers.DemoItemHandlers
 {
     public class DemoItemUpdateHandler(IUnitOfWork unitOfWork, ILogger<DemoItemUpdateHandler> logger) : IRequestHandler<DemoItemUpdateCommand>
     {

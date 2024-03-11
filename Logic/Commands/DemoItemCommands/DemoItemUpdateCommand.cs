@@ -1,9 +1,9 @@
 ﻿using MediatR;
 using System.Text.Json.Serialization;
 
-namespace Logic.Commands
+namespace Logic.Commands.DemoItemCommands
 {
-    public class DemoItemUpdateCommand(string name,decimal price) : IRequest
+    public class DemoItemUpdateCommand(string name, decimal price) : IRequest
     {
         [JsonIgnore]
         public int Id { get; set; }

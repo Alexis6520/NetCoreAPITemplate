@@ -1,20 +1,20 @@
 ﻿using Domain;
-using Logic.Commands;
 using Logic.Exceptions;
-using Logic.Handlers;
 using Logic.Validators;
-using Microsoft.Extensions.Logging;
 using Moq;
-using Services;
 using Services.Repositories;
+using Services;
+using Microsoft.Extensions.Logging;
+using Logic.Commands.DemoItemCommands;
+using Logic.Handlers.DemoItemHandlers;
 
-namespace Infrastructure.UnitTests
+namespace Infrastructure.UnitTests.DemoItemTests
 {
     [TestClass]
-    public class DemoItemUpdateTest
+    public class DemoItemDeleteTest
     {
         private readonly Mock<IUnitOfWork> _unitOfWorkMock = new();
-        private readonly Mock<ILogger<DemoItemUpdateHandler>> _loggerMock = new();
+        private readonly Mock<ILogger<DemoItemDeleteHandler>> _loggerMock = new();
         private readonly Mock<IDemoItemRepository> _demoItemRepoMock = new();
 
         public static IEnumerable<object[]> ValidationData
@@ -23,20 +23,21 @@ namespace Infrastructure.UnitTests
             {
                 return new[]
                 {
-                    [new DemoItemUpdateCommand(string.Empty,100)],
-                    [new DemoItemUpdateCommand(null,100)],
-                    [new DemoItemUpdateCommand("  ",100)],
-                    [new DemoItemUpdateCommand("Papas",-1)],
-                    new[] {new DemoItemUpdateCommand(null,-1)},
+                    new[] { new DemoItemDeleteCommand { Id=0} },
+                    new[] { new DemoItemDeleteCommand { Id=-1} },
                 };
             }
         }
 
+        /// <summary>
+        /// Coumprueba el validador del comando
+        /// </summary>
+        /// <param name="command"></param>
         [TestMethod]
         [DynamicData(nameof(ValidationData))]
-        public void ValidateCommand(DemoItemUpdateCommand command)
+        public void ValidateCommand(DemoItemDeleteCommand command)
         {
-            var validator = new DemoItemUpdateValidator();
+            var validator = new DemoItemDeleteValidator();
             var result = validator.Validate(command);
             Assert.IsFalse(result.IsValid);
         }
@@ -46,7 +47,7 @@ namespace Infrastructure.UnitTests
         /// </summary>
         /// <returns></returns>
         [TestMethod]
-        public async Task UpdateDemoItemAsync()
+        public async Task DeleteDemoItemAsync()
         {
             var demoItem = new DemoItem("Ruffles", 30) { Id = 1 };
             var param = new object[] { demoItem.Id };
@@ -54,26 +55,32 @@ namespace Infrastructure.UnitTests
             _demoItemRepoMock.Setup(x => x.GetAsync(param, CancellationToken.None))
                 .Returns(Task.FromResult(demoItem));
 
+            var wasRemoved = false;
+            var changesSaved = false;
+
+            _demoItemRepoMock.Setup(x => x.Remove(demoItem))
+                .Callback(() => wasRemoved = true);
+
             _unitOfWorkMock.Setup(x => x.DemoItems)
                 .Returns(_demoItemRepoMock.Object);
 
-            var changesSaved = false;
-            _unitOfWorkMock.Setup(x => x.SaveChangesAsync(CancellationToken.None)).Callback(() => changesSaved = true);
-            var command = new DemoItemUpdateCommand("Cheetos", 40) { Id = 1 };
-            var handler = new DemoItemUpdateHandler(_unitOfWorkMock.Object, _loggerMock.Object);
+            _unitOfWorkMock.Setup(x => x.SaveChangesAsync(CancellationToken.None))
+                .Callback(() => changesSaved = wasRemoved);
+
+            var command = new DemoItemDeleteCommand { Id = 1 };
+            var handler = new DemoItemDeleteHandler(_unitOfWorkMock.Object, _loggerMock.Object);
             await handler.Handle(command, CancellationToken.None);
-            Assert.IsTrue(demoItem.Name == command.Name);
-            Assert.IsTrue(demoItem.Price == command.Price);
+            Assert.IsTrue(wasRemoved);
             Assert.IsTrue(changesSaved);
         }
 
         /// <summary>
-        /// Intenta actualizar un artículo que ya no existe
+        /// Intenta eliminar un artículo que ya no existe
         /// </summary>
         /// <returns></returns>
         [TestMethod]
         [ExpectedException(typeof(NotFoundException))]
-        public async Task TryUpdateNotExistingItemAsync()
+        public async Task TryDeleteNotExistingItemAsync()
         {
             var demoItem = new DemoItem("Ruffles", 30) { Id = 1 };
             var param = new object[] { demoItem.Id };
@@ -84,8 +91,8 @@ namespace Infrastructure.UnitTests
             _unitOfWorkMock.Setup(x => x.DemoItems)
                 .Returns(_demoItemRepoMock.Object);
 
-            var command = new DemoItemUpdateCommand("Cheetos", 40) { Id = 1 };
-            var handler = new DemoItemUpdateHandler(_unitOfWorkMock.Object, _loggerMock.Object);
+            var command = new DemoItemDeleteCommand() { Id = 1 };
+            var handler = new DemoItemDeleteHandler(_unitOfWorkMock.Object, _loggerMock.Object);
             await handler.Handle(command, CancellationToken.None);
         }
     }

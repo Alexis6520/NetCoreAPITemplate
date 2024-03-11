@@ -2,7 +2,7 @@
 using AutoMapper.QueryableExtensions;
 using Domain;
 using Microsoft.EntityFrameworkCore;
-using Services.DTOs;
+using Services.DTOs.DemoItemDTOs;
 using Services.Repositories;
 
 namespace Infrastructure.Persistence.Repositories

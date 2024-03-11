@@ -1,6 +1,6 @@
 ﻿using MediatR;
 
-namespace Logic.Commands
+namespace Logic.Commands.DemoItemCommands
 {
     public class DemoItemDeleteCommand : IRequest
     {

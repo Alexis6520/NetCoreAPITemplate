@@ -1,7 +1,7 @@
 ﻿using FluentValidation;
-using Logic.Commands;
+using Logic.Commands.DemoItemCommands;
 
-namespace Logic.Validators
+namespace Logic.Validators.DemoItemValidators
 {
     public class DemoItemCreateValidator : AbstractValidator<DemoItemCreateCommand>
     {

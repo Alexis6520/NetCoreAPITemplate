@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
 using Domain;
-using Services.DTOs;
+using Services.DTOs.DemoItemDTOs;
 
 namespace Logic.Mappers
 {

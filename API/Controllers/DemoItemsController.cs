@@ -1,9 +1,9 @@
-﻿using Logic.Commands;
+﻿using Logic.Commands.DemoItemCommands;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Services;
-using Services.DTOs;
+using Services.DTOs.DemoItemDTOs;
 
 namespace API.Controllers
 {
