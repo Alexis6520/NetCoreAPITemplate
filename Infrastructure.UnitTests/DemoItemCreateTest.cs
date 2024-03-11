@@ -30,7 +30,7 @@ namespace Infrastructure.UnitTests
         }
 
         [TestMethod]
-        [DynamicData(nameof(ValidationData))] 
+        [DynamicData(nameof(ValidationData))]
         public void ValidateCommand(DemoItemCreateCommand command)
         {
             var validator = new DemoItemCreateValidator();
@@ -46,9 +46,12 @@ namespace Infrastructure.UnitTests
         public async Task CreateDemoItemAsync()
         {
             _unitOfWorkMock.Setup(x => x.DemoItems).Returns(new Mock<IDemoItemRepository>().Object);
+            var saved = false;
+            _unitOfWorkMock.Setup(x => x.SaveChangesAsync(CancellationToken.None)).Callback(() => { saved = true; });
             var handler = new DemoItemCreateHandler(_unitOfWorkMock.Object, _loggerMock.Object);
             var command = new DemoItemCreateCommand("Doritos", 50);
             await handler.Handle(command, CancellationToken.None);
+            Assert.IsTrue(saved);
         }
     }
 }

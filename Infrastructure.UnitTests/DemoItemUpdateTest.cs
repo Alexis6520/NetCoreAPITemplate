@@ -57,11 +57,14 @@ namespace Infrastructure.UnitTests
             _unitOfWorkMock.Setup(x => x.DemoItems)
                 .Returns(_demoItemRepoMock.Object);
 
+            var changesSaved = false;
+            _unitOfWorkMock.Setup(x => x.SaveChangesAsync(CancellationToken.None)).Callback(() => changesSaved = true);
             var command = new DemoItemUpdateCommand("Cheetos", 40) { Id = 1 };
             var handler = new DemoItemUpdateHandler(_unitOfWorkMock.Object, _loggerMock.Object);
             await handler.Handle(command, CancellationToken.None);
             Assert.IsTrue(demoItem.Name == command.Name);
             Assert.IsTrue(demoItem.Price == command.Price);
+            Assert.IsTrue(changesSaved);
         }
 
         /// <summary>

@@ -24,6 +24,7 @@ namespace Infrastructure.UnitTests
                 return new[]
                 {
                     new[] { new DemoItemDeleteCommand { Id=0} },
+                    new[] { new DemoItemDeleteCommand { Id=-1} },
                 };
             }
         }
@@ -55,6 +56,7 @@ namespace Infrastructure.UnitTests
                 .Returns(Task.FromResult(demoItem));
 
             var wasRemoved = false;
+            var changesSaved = false;
 
             _demoItemRepoMock.Setup(x => x.Remove(demoItem))
                 .Callback(() => wasRemoved = true);
@@ -62,10 +64,14 @@ namespace Infrastructure.UnitTests
             _unitOfWorkMock.Setup(x => x.DemoItems)
                 .Returns(_demoItemRepoMock.Object);
 
+            _unitOfWorkMock.Setup(x => x.SaveChangesAsync(CancellationToken.None))
+                .Callback(() => changesSaved = wasRemoved);
+
             var command = new DemoItemDeleteCommand { Id = 1 };
             var handler = new DemoItemDeleteHandler(_unitOfWorkMock.Object, _loggerMock.Object);
             await handler.Handle(command, CancellationToken.None);
             Assert.IsTrue(wasRemoved);
+            Assert.IsTrue(changesSaved);
         }
 
         /// <summary>
