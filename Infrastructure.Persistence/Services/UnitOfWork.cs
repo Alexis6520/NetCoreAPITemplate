@@ -3,7 +3,7 @@ using Services;
 using Services.Repositories;
 using System.Reflection;
 
-namespace Infrastructure.Persistence
+namespace Infrastructure.Persistence.Services
 {
     public class UnitOfWork : IUnitOfWork
     {

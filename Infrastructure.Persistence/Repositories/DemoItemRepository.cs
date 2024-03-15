@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using AutoMapper.QueryableExtensions;
 using Domain;
+using Infrastructure.Persistence.Services;
 using Microsoft.EntityFrameworkCore;
 using Services.DTOs.DemoItemDTOs;
 using Services.Repositories;

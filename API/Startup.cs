@@ -1,6 +1,6 @@
 ﻿using API.Responses;
 using Domain.Settings;
-using Infrastructure.Persistence;
+using Infrastructure.Persistence.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;

@@ -1,5 +1,4 @@
-﻿using Domain;
-using Logic.Exceptions;
+﻿using Logic.Exceptions;
 using Moq;
 using Services.Repositories;
 using Services;
@@ -7,6 +6,7 @@ using Microsoft.Extensions.Logging;
 using Logic.Commands.DemoItemCommands;
 using Logic.Handlers.DemoItemHandlers;
 using Logic.Validators.DemoItemValidators;
+using Domain;
 
 namespace Infrastructure.UnitTests.DemoItemTests
 {

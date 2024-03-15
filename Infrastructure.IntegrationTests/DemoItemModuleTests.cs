@@ -1,20 +1,13 @@
-﻿using Logic.Commands.DemoItemCommands;
-using Microsoft.AspNetCore.Authentication;
-using Microsoft.AspNetCore.TestHost;
-using Microsoft.Extensions.DependencyInjection;
-using Services;
+﻿using Infrastructure.IntegrationTests.Services;
+using Logic.Commands.DemoItemCommands;
 using Services.DTOs.DemoItemDTOs;
 using System.Net;
-using System.Net.Http.Headers;
 using System.Net.Http.Json;
 
 namespace Infrastructure.IntegrationTests
 {
-    public class DemoItemModuleTests(CustomWebApplicationFactory<Program> factory) : IClassFixture<CustomWebApplicationFactory<Program>>
+    public class DemoItemModuleTests(CustomWebApplicationFactory<Program> factory) : BaseTest(factory, "api/DemoItems")
     {
-        private readonly CustomWebApplicationFactory<Program> _factory = factory;
-        private readonly string _url = "api/DemoItems";
-
         /// <summary>
         /// Crea un artículo demo
         /// </summary>
@@ -22,15 +15,18 @@ namespace Infrastructure.IntegrationTests
         [Fact]
         public async Task PostDemoItemAsync()
         {
-            using var client = GetDefaultClient();
-            var command = new DemoItemCreateCommand("Cheetos", 15);
-            var response = await client.PostAsJsonAsync(_url, command);
-            response.EnsureSuccessStatusCode();
-            var id = response.Content.ReadFromJsonAsync<int>();
-            using var scope = _factory.Services.CreateScope();
-            var unitOfWork = scope.ServiceProvider.GetService<IUnitOfWork>();
-            var demoItem = unitOfWork.DemoItems.GetAsync([id]);
+            var id = await CreateDemoItemAsync();
+            var demoItem = UnitOfWork.DemoItems.GetAsync([id]);
             Assert.NotNull(demoItem);
+        }
+
+        private async Task<int> CreateDemoItemAsync()
+        {
+            var command = new DemoItemCreateCommand("Cheetos", 15);
+            var response = await Client.PostAsJsonAsync(_url, command);
+            response.EnsureSuccessStatusCode();
+            var id = await response.Content.ReadFromJsonAsync<int>();
+            return id;
         }
 
         /// <summary>
@@ -53,8 +49,8 @@ namespace Infrastructure.IntegrationTests
         [Fact]
         public async Task GetDemoItemsAsync()
         {
-            using var client = GetDefaultClient();
-            var response = await client.GetAsync(_url);
+            await CreateDemoItemAsync();
+            var response = await Client.GetAsync(_url);
             response.EnsureSuccessStatusCode();
             var items = await response.Content.ReadFromJsonAsync<List<DemoItemDTO>>();
             Assert.NotNull(items);
@@ -80,15 +76,13 @@ namespace Infrastructure.IntegrationTests
         [Fact]
         public async Task PutDemoItemAsync()
         {
-            using var scope = _factory.Services.CreateScope();
-            var unitOfWork = scope.ServiceProvider.GetService<IUnitOfWork>();
-            var demoItem = (await unitOfWork.DemoItems.GetAllAsync()).First();
-            var url = $"{_url}/{demoItem.Id}";
+            var id = await CreateDemoItemAsync();
+            var url = $"{_url}/{id}";
             var command = new DemoItemUpdateCommand("Picafresa", 1);
-            using var client = GetDefaultClient();
-            var response = await client.PutAsJsonAsync(url, command);
+            var response = await Client.PutAsJsonAsync(url, command);
             response.EnsureSuccessStatusCode();
-            var result = await unitOfWork.DemoItems.GetAsync([demoItem.Id]);
+            var demoItem = await UnitOfWork.DemoItems.GetAsync([id]);
+            var result = await UnitOfWork.DemoItems.GetAsync([demoItem.Id]);
             Assert.Equal(command.Name, result.Name);
             Assert.Equal(command.Price, result.Price);
         }
@@ -100,10 +94,7 @@ namespace Infrastructure.IntegrationTests
         [Fact]
         public async Task UnauthorizedPutDemoItemAsync()
         {
-            using var scope = _factory.Services.CreateScope();
-            var unitOfWork = scope.ServiceProvider.GetService<IUnitOfWork>();
-            var demoItem = (await unitOfWork.DemoItems.GetAllAsync()).First();
-            var url = $"{_url}/{demoItem.Id}";
+            var url = $"{_url}/1";
             var command = new DemoItemUpdateCommand("Picafresa", 1);
             using var client = _factory.CreateClient();
             var response = await client.PutAsJsonAsync(url, command);
@@ -117,14 +108,11 @@ namespace Infrastructure.IntegrationTests
         [Fact]
         public async Task DeleteDemoItemAsync()
         {
-            using var scope = _factory.Services.CreateScope();
-            var unitOfWork = scope.ServiceProvider.GetService<IUnitOfWork>();
-            var demoItem = (await unitOfWork.DemoItems.GetAllAsync()).First();
-            var url = $"{_url}/{demoItem.Id}";
-            using var client = GetDefaultClient();
-            var response = await client.DeleteAsync(url);
+            var id = await CreateDemoItemAsync();
+            var url = $"{_url}/{id}";
+            var response = await Client.DeleteAsync(url);
             response.EnsureSuccessStatusCode();
-            var result = await unitOfWork.DemoItems.GetAsync([demoItem.Id]);
+            var result = await UnitOfWork.DemoItems.GetAsync([id]);
             Assert.Null(result);
         }
 
@@ -135,29 +123,10 @@ namespace Infrastructure.IntegrationTests
         [Fact]
         public async Task UnauthorizedDeleteDemoItemAsync()
         {
-            using var scope = _factory.Services.CreateScope();
-            var unitOfWork = scope.ServiceProvider.GetService<IUnitOfWork>();
-            var demoItem = (await unitOfWork.DemoItems.GetAllAsync()).First();
-            var url = $"{_url}/{demoItem.Id}";
+            var url = $"{_url}/1";
             using var client = _factory.CreateClient();
             var response = await client.DeleteAsync(url);
             Assert.Equal(HttpStatusCode.Unauthorized, response.StatusCode);
-        }
-
-        private HttpClient GetDefaultClient()
-        {
-            // Configura la la petición para utilizar el esquema de autenticación de pruebas
-            var client = _factory.WithWebHostBuilder(builder =>
-            {
-                builder.ConfigureTestServices(services =>
-                {
-                    services.AddAuthentication(opts => opts.DefaultAuthenticateScheme = "TestScheme")
-                    .AddScheme<AuthenticationSchemeOptions, TestAuthHandler>("TestScheme", opts => { });
-                });
-            }).CreateClient();
-
-            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("TestScheme");
-            return client;
         }
     }
 }

@@ -1,11 +1,11 @@
-﻿using Infrastructure.Persistence;
+﻿using Infrastructure.Persistence.Services;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using System.Data.Common;
 
-namespace Infrastructure.IntegrationTests
+namespace Infrastructure.IntegrationTests.Services
 {
     public class CustomWebApplicationFactory<T> : WebApplicationFactory<T> where T : class
     {
@@ -32,7 +32,7 @@ namespace Infrastructure.IntegrationTests
 
             services.AddDbContext<ApplicationDbContext>((container, options) =>
             {
-                options.UseSqlServer("Server=10.10.50.5;Database=APITemplateQA;User Id=sa;Password=@dministrator1;TrustServerCertificate=True");
+                options.UseSqlServer("Server=BATICOMPUTADORA;Database=APITemplateTest;Trusted_Connection=True;TrustServerCertificate=True");
             });
         }
     }
