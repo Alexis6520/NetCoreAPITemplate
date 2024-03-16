@@ -3,12 +3,16 @@ using Logic.Commands.DemoItemCommands;
 using Logic.Handlers.DemoItemHandlers;
 using Domain;
 using Logic.Validators.DemoItemValidators;
+using Moq;
+using Services.Repositories;
 
 namespace Infrastructure.UnitTests.DemoItemTests
 {
     [TestClass]
     public class DemoItemDeleteTest : BaseTest<DemoItemDeleteHandler>
     {
+        private readonly Mock<IDemoItemRepository> _demoItemRepoMock = new();
+
         public static IEnumerable<object[]> ValidationData
         {
             get
@@ -47,23 +51,18 @@ namespace Infrastructure.UnitTests.DemoItemTests
             _demoItemRepoMock.Setup(x => x.GetAsync(param, CancellationToken.None))
                 .Returns(Task.FromResult(demoItem));
 
-            var wasRemoved = false;
-            var changesSaved = false;
-
-            _demoItemRepoMock.Setup(x => x.Remove(demoItem))
-                .Callback(() => wasRemoved = true);
+            _demoItemRepoMock.Setup(x => x.Remove(demoItem)).Verifiable();
 
             _unitOfWorkMock.Setup(x => x.DemoItems)
                 .Returns(_demoItemRepoMock.Object);
 
-            _unitOfWorkMock.Setup(x => x.SaveChangesAsync(CancellationToken.None))
-                .Callback(() => changesSaved = wasRemoved);
+            _unitOfWorkMock.Setup(x => x.SaveChangesAsync(CancellationToken.None)).Verifiable();
 
             var command = new DemoItemDeleteCommand { Id = 1 };
             var handler = new DemoItemDeleteHandler(_unitOfWorkMock.Object, _loggerMock.Object);
             await handler.Handle(command, CancellationToken.None);
-            Assert.IsTrue(wasRemoved);
-            Assert.IsTrue(changesSaved);
+            _demoItemRepoMock.VerifyAll();
+            _unitOfWorkMock.VerifyAll();
         }
 
         /// <summary>

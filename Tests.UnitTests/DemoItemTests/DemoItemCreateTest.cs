@@ -9,6 +9,11 @@ namespace Infrastructure.UnitTests.DemoItemTests
     [TestClass]
     public class DemoItemCreateTest : BaseTest<DemoItemCreateHandler>
     {
+        private readonly Mock<IDemoItemRepository> _demoItemRepoMock = new();
+
+        /// <summary>
+        /// Datos inválidos de prueba para evaluar el validador
+        /// </summary>
         public static IEnumerable<object[]> ValidationData
         {
             get
@@ -24,6 +29,10 @@ namespace Infrastructure.UnitTests.DemoItemTests
             }
         }
 
+        /// <summary>
+        /// Prueba el validador de comandos
+        /// </summary>
+        /// <param name="command"></param>
         [TestMethod]
         [DynamicData(nameof(ValidationData))]
         public void ValidateCommand(DemoItemCreateCommand command)
@@ -40,13 +49,12 @@ namespace Infrastructure.UnitTests.DemoItemTests
         [TestMethod]
         public async Task CreateDemoItemAsync()
         {
-            _unitOfWorkMock.Setup(x => x.DemoItems).Returns(new Mock<IDemoItemRepository>().Object);
-            var saved = false;
-            _unitOfWorkMock.Setup(x => x.SaveChangesAsync(CancellationToken.None)).Callback(() => { saved = true; });
+            _unitOfWorkMock.Setup(x => x.DemoItems).Returns(_demoItemRepoMock.Object);
+            _unitOfWorkMock.Setup(x => x.SaveChangesAsync(CancellationToken.None)).Verifiable("No se invocó Save changes");
             var handler = new DemoItemCreateHandler(_unitOfWorkMock.Object, _loggerMock.Object);
             var command = new DemoItemCreateCommand("Doritos", 50);
             await handler.Handle(command, CancellationToken.None);
-            Assert.IsTrue(saved);
+            _unitOfWorkMock.VerifyAll();
         }
     }
 }
