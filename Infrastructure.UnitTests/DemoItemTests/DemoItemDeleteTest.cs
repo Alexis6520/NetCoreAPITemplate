@@ -1,22 +1,14 @@
 ﻿using Logic.Exceptions;
-using Moq;
-using Services.Repositories;
-using Services;
-using Microsoft.Extensions.Logging;
 using Logic.Commands.DemoItemCommands;
 using Logic.Handlers.DemoItemHandlers;
-using Logic.Validators.DemoItemValidators;
 using Domain;
+using Logic.Validators.DemoItemValidators;
 
 namespace Infrastructure.UnitTests.DemoItemTests
 {
     [TestClass]
-    public class DemoItemDeleteTest
+    public class DemoItemDeleteTest : BaseTest<DemoItemDeleteHandler>
     {
-        private readonly Mock<IUnitOfWork> _unitOfWorkMock = new();
-        private readonly Mock<ILogger<DemoItemDeleteHandler>> _loggerMock = new();
-        private readonly Mock<IDemoItemRepository> _demoItemRepoMock = new();
-
         public static IEnumerable<object[]> ValidationData
         {
             get

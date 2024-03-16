@@ -3,20 +3,12 @@ using Logic.Commands.DemoItemCommands;
 using Logic.Exceptions;
 using Logic.Handlers.DemoItemHandlers;
 using Logic.Validators.DemoItemValidators;
-using Microsoft.Extensions.Logging;
-using Moq;
-using Services;
-using Services.Repositories;
 
 namespace Infrastructure.UnitTests.DemoItemTests
 {
     [TestClass]
-    public class DemoItemUpdateTest
+    public class DemoItemUpdateTest : BaseTest<DemoItemUpdateHandler>
     {
-        private readonly Mock<IUnitOfWork> _unitOfWorkMock = new();
-        private readonly Mock<ILogger<DemoItemUpdateHandler>> _loggerMock = new();
-        private readonly Mock<IDemoItemRepository> _demoItemRepoMock = new();
-
         public static IEnumerable<object[]> ValidationData
         {
             get

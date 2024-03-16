@@ -6,7 +6,7 @@ using System.Net.Http.Json;
 
 namespace Infrastructure.IntegrationTests
 {
-    public class DemoItemModuleTests(CustomWebApplicationFactory<Program> factory) : BaseTest(factory, "api/DemoItems")
+    public class DemoItemTest(CustomWebApplicationFactory<Program> factory) : BaseTest(factory, "api/DemoItems")
     {
         /// <summary>
         /// Crea un artículo demo

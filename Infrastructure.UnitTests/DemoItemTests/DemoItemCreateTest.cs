@@ -1,19 +1,14 @@
 using Logic.Commands.DemoItemCommands;
 using Logic.Handlers.DemoItemHandlers;
 using Logic.Validators.DemoItemValidators;
-using Microsoft.Extensions.Logging;
 using Moq;
-using Services;
 using Services.Repositories;
 
 namespace Infrastructure.UnitTests.DemoItemTests
 {
     [TestClass]
-    public class DemoItemCreateTest
+    public class DemoItemCreateTest : BaseTest<DemoItemCreateHandler>
     {
-        private readonly Mock<IUnitOfWork> _unitOfWorkMock = new();
-        private readonly Mock<ILogger<DemoItemCreateHandler>> _loggerMock = new();
-
         public static IEnumerable<object[]> ValidationData
         {
             get
