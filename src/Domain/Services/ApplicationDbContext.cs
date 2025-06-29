@@ -25,7 +25,7 @@ namespace Domain.Services
         {
             Type contextType = GetType();
             if (string.IsNullOrEmpty(contextType.Namespace)) return;
-            string globalConfigNamespace = string.Join('.', contextType.Namespace.Split('.')[..-1]);
+            string globalConfigNamespace = string.Join('.', contextType.Namespace.Split('.')[..^1]);
             globalConfigNamespace += ".Configuration";
 
             modelBuilder.ApplyConfigurationsFromAssembly(

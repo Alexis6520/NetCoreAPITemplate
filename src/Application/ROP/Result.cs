@@ -1,4 +1,5 @@
 ﻿using System.Collections.Immutable;
+using System.Net;
 
 namespace Application.ROP
 {
@@ -49,10 +50,11 @@ namespace Application.ROP
     /// </summary>
     /// <param name="code">Código de error</param>
     /// <param name="Message">Descripción del error</param>
-    public readonly struct Error(string code, string Message)
+    public readonly struct Error(string code, string Message, HttpStatusCode statusCode = HttpStatusCode.BadRequest)
     {
         public string Code { get; } = code;
         public string Message { get; } = Message;
+        public HttpStatusCode StatusCode { get; } = statusCode;
     }
 
     /// <summary>
