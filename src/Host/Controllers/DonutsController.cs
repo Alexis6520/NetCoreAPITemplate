@@ -1,5 +1,7 @@
 ﻿using Application.Commands.Donuts.Create;
+using Application.Queries;
 using Application.Queries.Donuts;
+using Application.Queries.Donuts.DTOs;
 using Application.ROP;
 using Host.Abstractions;
 using MediatR;
@@ -26,6 +28,14 @@ namespace Host.Controllers
                 PageSize = pageSize
             };
 
+            return BuildResponse(await Mediator.Send(query));
+        }
+
+        [HttpGet("{id}")]
+        [ProducesResponseType<Result<DonutDTO>>(StatusCodes.Status200OK)]
+        public async Task<IActionResult> GetById(int id)
+        {
+            var query = new FindQuery<int, DonutDTO>(id);
             return BuildResponse(await Mediator.Send(query));
         }
     }
