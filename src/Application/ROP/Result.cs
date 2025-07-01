@@ -1,5 +1,6 @@
 ﻿using System.Collections.Immutable;
 using System.Net;
+using System.Text.Json.Serialization;
 
 namespace Application.ROP
 {
@@ -9,39 +10,70 @@ namespace Application.ROP
     /// <typeparam name="T">Tipo de valor devuelto</typeparam>
     public readonly struct Result<T>
     {
-        private Result(T? value, ImmutableArray<Error> errors)
+        private Result(T? value, HttpStatusCode statusCode)
         {
             Value = value;
+            SatusCode = statusCode;
+            Errors = [];
+        }
+
+        private Result(ImmutableArray<Error> errors, HttpStatusCode statusCode)
+        {
+            Value = default;
+            SatusCode = statusCode;
             Errors = errors;
         }
 
+        private static readonly Unity Unity = new();
+
         public T? Value { get; }
         public ImmutableArray<Error> Errors { get; }
+
+        [JsonIgnore]
         public readonly bool Succeeded => Errors.IsEmpty;
 
-        public static Result<T> Success(T value)
+        [JsonIgnore]
+        public HttpStatusCode SatusCode { get; }
+
+        public static Result<T> Success(T value, HttpStatusCode statusCode = HttpStatusCode.OK)
         {
-            return new Result<T>(value, []);
+            if (statusCode >= HttpStatusCode.BadRequest)
+            {
+                throw new ArgumentOutOfRangeException(
+                    nameof(statusCode),
+                    statusCode,
+                    "El código de estado debe ser menor a 400");
+            }
+
+            return new Result<T>(value, statusCode);
         }
 
-        public static Result<Unity> Success()
+        public static Result<Unity> Success(HttpStatusCode statusCode = HttpStatusCode.NoContent)
         {
-            return Result<Unity>.Success(new());
+            return Result<Unity>.Success(Unity, statusCode);
         }
 
-        public static Result<T> Failure(ImmutableArray<Error> errors)
+        public static Result<T> Failure(ImmutableArray<Error> errors, HttpStatusCode statusCode)
         {
             if (errors.IsEmpty)
             {
                 throw new ArgumentException("Tiene que haber al menos un error", nameof(errors));
             }
 
-            return new Result<T>(default, errors);
+            if(statusCode < HttpStatusCode.BadRequest)
+            {
+                throw new ArgumentOutOfRangeException(
+                    nameof(statusCode),
+                    statusCode,
+                    "El código de estado debe ser mayor o igual a 400");
+            }
+
+            return new Result<T>(errors, statusCode);
         }
 
-        public static Result<T> Failure(params Error[] errors)
+        public static Result<T> Failure(HttpStatusCode statusCode, params Error[] errors)
         {
-            return Failure(errors.ToImmutableArray());
+            return Failure([.. errors], statusCode);
         }
     }
 
@@ -50,11 +82,10 @@ namespace Application.ROP
     /// </summary>
     /// <param name="code">Código de error</param>
     /// <param name="Message">Descripción del error</param>
-    public readonly struct Error(string code, string Message, HttpStatusCode statusCode = HttpStatusCode.BadRequest)
+    public readonly struct Error(string code, string Message)
     {
         public string Code { get; } = code;
         public string Message { get; } = Message;
-        public HttpStatusCode StatusCode { get; } = statusCode;
     }
 
     /// <summary>

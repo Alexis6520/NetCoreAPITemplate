@@ -4,7 +4,8 @@ using MediatR;
 namespace Application.Commands.Donuts.Create
 {
     /// <summary>
-    /// Comando para crear una donita :)
+    /// Comando para crear una donita :) 
+    /// Devuelve el ID de la donita creada
     /// </summary>
     public class CreateDonutCommand : IRequest<Result<int>>
     {

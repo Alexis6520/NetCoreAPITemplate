@@ -3,6 +3,7 @@ using Domain.Entities;
 using Domain.Services;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
+using System.Net;
 
 namespace Application.Commands.Donuts.Create
 {
@@ -12,18 +13,20 @@ namespace Application.Commands.Donuts.Create
 
         public async Task<Result<int>> Handle(CreateDonutCommand request, CancellationToken cancellationToken)
         {
-            return await CheckNameAvailability(request.Name)
-                .MapAsync(_ => Task.FromResult(request))
-                .MapAsync(SaveDonut);
+            return await CheckNameAvailability(request)
+                .MapAsync(SaveDonut)
+                .WithStatusCodeAsync(HttpStatusCode.Created);
         }
 
-        private async Task<Result<Unity>> CheckNameAvailability(string name)
+        private async Task<Result<CreateDonutCommand>> CheckNameAvailability(CreateDonutCommand request)
         {
             bool nameAvailable = !await _dbContext.Donuts
-                .AnyAsync(d => d.Name == name);
+                .AnyAsync(d => d.Name == request.Name);
 
-            if (!nameAvailable) return Result<Unity>.Failure(Errors.DONUT_NAME_NOT_AVAILABLE);
-            return Result<Unity>.Success();
+            if (!nameAvailable)
+                return Result<CreateDonutCommand>.Failure(HttpStatusCode.Conflict, Errors.DONUT_NAME_NOT_AVAILABLE);
+
+            return Result<CreateDonutCommand>.Success(request);
         }
 
         private async Task<int> SaveDonut(CreateDonutCommand request)

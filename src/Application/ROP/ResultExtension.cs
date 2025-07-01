@@ -1,4 +1,7 @@
-﻿namespace Application.ROP
+﻿using System.Net;
+using System.Threading.Tasks;
+
+namespace Application.ROP
 {
     public static class ResultExtension
     {
@@ -11,11 +14,11 @@
         /// <param name="func">Función a encadenar</param>
         /// <returns></returns>
         /// <exception cref="NullReferenceException"></exception>
-        public static Result<TOut> Bind<TIn,TOut>(
+        public static Result<TOut> Bind<TIn, TOut>(
             this Result<TIn> result,
             Func<TIn, Result<TOut>> func)
         {
-            if (!result.Succeeded) return Result<TOut>.Failure(result.Errors);
+            if (!result.Succeeded) return Result<TOut>.Failure(result.Errors, result.SatusCode);
 
             if (result.Value == null)
             {
@@ -37,7 +40,7 @@
             this Result<TIn> result,
             Func<TIn, TOut> func)
         {
-            return result.Bind(value => Result<TOut>.Success(func(value))); 
+            return result.Bind(value => Result<TOut>.Success(func(value)));
         }
 
         /// <summary>
@@ -73,7 +76,7 @@
         {
             Result<TIn> result = await resultTask;
 
-            if (!result.Succeeded) return Result<TOut>.Failure(result.Errors);
+            if (!result.Succeeded) return Result<TOut>.Failure(result.Errors, result.SatusCode);
 
             if (result.Value == null)
             {
@@ -114,6 +117,35 @@
                 await action(value);
                 return Result<TIn>.Success(value);
             });
+        }
+
+        /// <summary>
+        /// Genera un nuevo resultado con el código de estado HTTP especificado
+        /// </summary>
+        /// <typeparam name="T">Tipo de valor devuelto</typeparam>
+        /// <param name="result">Resultado</param>
+        /// <param name="statusCode">Código de estado HTTP a establecer</param>
+        /// <returns></returns>
+        public static Result<T> WithStatusCode<T>(
+            this Result<T> result,
+            HttpStatusCode statusCode)
+        {
+            return result.Bind(value => Result<T>.Success(value, statusCode));
+        }
+
+        /// <summary>
+        /// Genera un nuevo resultado con el código de estado HTTP especificado de forma asíncrona
+        /// </summary>
+        /// <typeparam name="T">Tipo de valor devuelto</typeparam>
+        /// <param name="resultTask">Resultado</param>
+        /// <param name="statusCode">Código de estado HTTP a establecer</param>
+        /// <returns></returns>
+        public static async Task<Result<T>> WithStatusCodeAsync<T>(
+            this Task<Result<T>> resultTask,
+            HttpStatusCode statusCode)
+        {
+            return await resultTask.BindAsync(
+                value => Task.FromResult(Result<T>.Success(value, statusCode)));
         }
     }
 }
