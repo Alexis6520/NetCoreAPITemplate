@@ -1,6 +1,7 @@
 ﻿using Application.ROP;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
+using System.Net;
 
 namespace Host.Abstractions
 {
@@ -30,6 +31,11 @@ namespace Host.Abstractions
             return StatusCode(
                 (int)result.SatusCode,
                 result);
+        }
+
+        protected ObjectResult BuildResponse<T>(T value)
+        {
+            return BuildResponse<T>(Result<T>.Success(value));
         }
     }
 }

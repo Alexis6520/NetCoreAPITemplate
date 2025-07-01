@@ -1,4 +1,5 @@
 ﻿using Application.Commands.Donuts.Create;
+using Application.Queries.Donuts;
 using Application.ROP;
 using Host.Abstractions;
 using MediatR;
@@ -13,6 +14,19 @@ namespace Host.Controllers
         public async Task<IActionResult> Create([FromBody] CreateDonutCommand command)
         {
             return BuildResponse(await Mediator.Send(command));
+        }
+
+        [HttpGet]
+        [ProducesResponseType<Result<List<DonutsListQuery>>>(StatusCodes.Status200OK)]
+        public async Task<IActionResult> GetList(int page = 1, int pageSize = 10)
+        {
+            var query = new DonutsListQuery
+            {
+                Page = page,
+                PageSize = pageSize
+            };
+
+            return BuildResponse(await Mediator.Send(query));
         }
     }
 }
