@@ -18,7 +18,7 @@ namespace Application.ROP
             this Result<TIn> result,
             Func<TIn, Result<TOut>> func)
         {
-            if (!result.Succeeded) return Result<TOut>.Failure(result.Errors, result.SatusCode);
+            if (!result.Succeeded) return Result<TOut>.Failure(result.Errors, result.StatusCode);
 
             if (result.Value == null)
             {
@@ -76,7 +76,7 @@ namespace Application.ROP
         {
             Result<TIn> result = await resultTask;
 
-            if (!result.Succeeded) return Result<TOut>.Failure(result.Errors, result.SatusCode);
+            if (!result.Succeeded) return Result<TOut>.Failure(result.Errors, result.StatusCode);
 
             if (result.Value == null)
             {

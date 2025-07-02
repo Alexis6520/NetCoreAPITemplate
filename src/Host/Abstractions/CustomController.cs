@@ -29,7 +29,7 @@ namespace Host.Abstractions
                 : result;
 
             return StatusCode(
-                (int)result.SatusCode,
+                (int)result.StatusCode,
                 result);
         }
 

@@ -13,14 +13,14 @@ namespace Application.ROP
         private Result(T? value, HttpStatusCode statusCode)
         {
             Value = value;
-            SatusCode = statusCode;
+            StatusCode = statusCode;
             Errors = [];
         }
 
         private Result(ImmutableArray<Error> errors, HttpStatusCode statusCode)
         {
             Value = default;
-            SatusCode = statusCode;
+            StatusCode = statusCode;
             Errors = errors;
         }
 
@@ -33,7 +33,7 @@ namespace Application.ROP
         public readonly bool Succeeded => Errors.IsEmpty;
 
         [JsonIgnore]
-        public HttpStatusCode SatusCode { get; }
+        public HttpStatusCode StatusCode { get; }
 
         public static Result<T> Success(T value, HttpStatusCode statusCode = HttpStatusCode.OK)
         {
