@@ -1,4 +1,5 @@
 using Application;
+using Host;
 using Infrastructure;
 using NLog;
 using NLog.Web;
@@ -18,9 +19,7 @@ try
     builder.Host.UseNLog();
 
     builder.Services.AddControllers();
-    // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
-    builder.Services.AddEndpointsApiExplorer();
-    builder.Services.AddSwaggerGen();
+    builder.Services.AddCustomSwagger();
 
     var app = builder.Build();
 

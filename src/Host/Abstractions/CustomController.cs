@@ -19,7 +19,6 @@ namespace Host.Abstractions
         /// </summary>
         /// <typeparam name="T">Tipo de valor devuelto</typeparam>
         /// <param name="result">Resultado a convertir</param>
-        /// <param name="statusCode">Código de estado HTTP en caso de éxito</param>
         /// <returns></returns>
         /// <exception cref="ArgumentOutOfRangeException"></exception>
         protected ObjectResult BuildResponse<T>(Result<T> result)

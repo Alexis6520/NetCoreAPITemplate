@@ -11,6 +11,11 @@ namespace Host.Controllers
 {
     public class DonutsController(IMediator mediator) : CustomController(mediator)
     {
+        /// <summary>
+        /// Crea una donita
+        /// </summary>
+        /// <param name="command"></param>
+        /// <returns></returns>
         [HttpPost]
         [ProducesResponseType<Result<int>>(StatusCodes.Status201Created)]
         public async Task<IActionResult> Create([FromBody] CreateDonutCommand command)
@@ -18,6 +23,12 @@ namespace Host.Controllers
             return BuildResponse(await Mediator.Send(command));
         }
 
+        /// <summary>
+        /// Lista las donitas
+        /// </summary>
+        /// <param name="page"></param>
+        /// <param name="pageSize"></param>
+        /// <returns></returns>
         [HttpGet]
         [ProducesResponseType<Result<List<DonutsListQuery>>>(StatusCodes.Status200OK)]
         public async Task<IActionResult> GetList(int page = 1, int pageSize = 10)
@@ -31,6 +42,11 @@ namespace Host.Controllers
             return BuildResponse(await Mediator.Send(query));
         }
 
+        /// <summary>
+        /// Obtiene una donita por su ID
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         [HttpGet("{id}")]
         [ProducesResponseType<Result<DonutDTO>>(StatusCodes.Status200OK)]
         public async Task<IActionResult> GetById(int id)
