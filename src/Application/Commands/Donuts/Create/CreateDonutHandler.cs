@@ -1,6 +1,8 @@
 ﻿using Application.ROP;
+using Application.Utils.Extensions;
 using Domain.Entities;
 using Domain.Services;
+using FluentValidation;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
@@ -8,14 +10,19 @@ using System.Net;
 
 namespace Application.Commands.Donuts.Create
 {
-    public class CreateDonutHandler(ApplicationDbContext dbContext,ILogger<CreateDonutHandler> logger) : IRequestHandler<CreateDonutCommand, Result<int>>
+    public class CreateDonutHandler(
+        ApplicationDbContext dbContext,
+        ILogger<CreateDonutHandler> logger,
+        IValidator<CreateDonutCommand> validator) : IRequestHandler<CreateDonutCommand, Result<int>>
     {
         private readonly ApplicationDbContext _dbContext = dbContext;
         private readonly ILogger<CreateDonutHandler> _logger = logger;
+        private readonly IValidator<CreateDonutCommand> _validator = validator;
 
         public async Task<Result<int>> Handle(CreateDonutCommand request, CancellationToken cancellationToken)
         {
-            return await CheckNameAvailability(request)
+            return await _validator.ValidateAndMapAsync(request)
+                .BindAsync(CheckNameAvailability)
                 .MapAsync(SaveDonut)
                 .WithStatusCodeAsync(HttpStatusCode.Created);
         }
