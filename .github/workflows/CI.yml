@@ -69,5 +69,5 @@ jobs:
 
     - name: Run Tests
       env:
-        ConnectionStrings__Default: "Host=localhost;Port=5432;Database=testdb;Username=testuser;Password=TestPassword731;"
+        ConnectionStrings__Default: "Host=localhost;Port=5432;Database=testdb;Username=testuser;Password=TestPassword731"
       run: dotnet test --no-build --verbosity normal
