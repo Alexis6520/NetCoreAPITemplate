@@ -88,5 +88,5 @@ jobs:
 
     - name: Run Integration Tests
       env:
-        ConnectionStrings__Default: Host=localhost;Port=5432;Database=testdb;Username=testuser;Password=testPassword
+        ConnectionStrings__Default: Host=postgres;Port=5432;Database=testdb;Username=testuser;Password=testPassword
       run: dotnet test src/IntegrationTests/IntegrationTests.csproj --no-build --verbosity normal
