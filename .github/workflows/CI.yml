@@ -59,7 +59,7 @@ jobs:
 
   integration-tests:
     runs-on: ubuntu-latest
-    needs: build
+    needs: unit-tests
 
     services:
       postgres:
