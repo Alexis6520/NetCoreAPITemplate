@@ -12,31 +12,14 @@ jobs:
 
     steps:
     - uses: actions/checkout@v4
-
-    - name: Cache NuGet packages
-      uses: actions/cache@v3
-      with:
-        path: ~/.nuget/packages
-        key: ${{ runner.os }}-nuget-${{ hashFiles('**/*.csproj') }}
-        restore-keys: |
-          ${{ runner.os }}-nuget-
-
     - name: Setup .NET
       uses: actions/setup-dotnet@v4
       with:
         dotnet-version: 8.0.x
-
     - name: Restore dependencies
       run: dotnet restore
-
     - name: Build
       run: dotnet build --no-restore
-
-    - name: Publish Build Artifacts
-      uses: actions/upload-artifact@v4.6.2
-      with:
-        name: build-output
-        path: '**/bin/**'
 
   unit-test:
     runs-on: ubuntu-latest
@@ -44,18 +27,14 @@ jobs:
 
     steps:
     - uses: actions/checkout@v4
-    - name: Download Build Artifacts
-      uses: actions/download-artifact@v4.3.0
-      with:
-        name: build-output
-
     - name: Setup .NET
       uses: actions/setup-dotnet@v4
       with:
         dotnet-version: 8.0.x
-
+    - name: Restore dependencies
+      run: dotnet restore
     - name: Run Unit Tests
-      run: dotnet test src/UnitTests/UnitTests.csproj --no-build --verbosity normal
+      run: dotnet test src/UnitTests/UnitTests.csproj --no-restore
 
   integration-test:
     runs-on: ubuntu-latest
@@ -78,16 +57,13 @@ jobs:
 
     steps:
     - uses: actions/checkout@v4
-    - name: Download Build Artifacts
-      uses: actions/download-artifact@v4.3.0
-      with:
-        name: build-output
-
     - name: Setup .NET
       uses: actions/setup-dotnet@v4
       with:
         dotnet-version: 8.0.x
+    - name: Restore dependencies
+      run: dotnet restore
     - name: Run Integration Tests
       env:
         ConnectionStrings__Default: Host=localhost;Port=5432;Database=testdb;Username=testuser;Password=testPassword
-      run: dotnet test src/IntegrationTests/IntegrationTests.csproj --no-build --verbosity normal
+      run: dotnet test src/IntegrationTests/IntegrationTests.csproj --no-restore
