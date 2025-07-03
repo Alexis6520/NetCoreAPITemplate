@@ -43,17 +43,18 @@ jobs:
     needs: build
 
     services:
-      postgres:
-        image: postgres:15
+      mssql:
+        image: mcr.microsoft.com/mssql/server:2022-latest
         env:
-          POSTGRES_USER: testuser
-          POSTGRES_PASSWORD: TestPassword731
-          POSTGRES_DB: testdb
+          SA_PASSWORD: "YourStrong!Passw0rd"
+          ACCEPT_EULA: "Y"
         options: >-
-          --health-cmd="pg_isready -U testuser"
+          --health-cmd=" /opt/mssql-tools/bin/sqlcmd -S localhost -U sa -P YourStrong!Passw0rd -Q 'SELECT 1'"
           --health-interval=10s
           --health-timeout=5s
           --health-retries=5
+        ports:
+          - 1433:1433
     
     steps:
     - uses: actions/checkout@v4
@@ -69,5 +70,5 @@ jobs:
 
     - name: Run Tests
       env:
-        ConnectionStrings__Default: Host=localhost;Port=5432;Database=testdb;Username=testuser;Password=TestPassword731;
+        ConnectionStrings__Default: "Server=localhost,1433;Database=master;User Id=sa;Password=YourStrong!Passw0rd;"
       run: dotnet test --no-build --verbosity normal
