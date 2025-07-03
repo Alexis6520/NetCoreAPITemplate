@@ -13,6 +13,14 @@ jobs:
     steps:
     - uses: actions/checkout@v4
 
+    - name: Cache NuGet packages
+      uses: actions/cache@v3
+      with:
+        path: ~/.nuget/packages
+        key: ${{ runner.os }}-nuget-${{ hashFiles('**/*.csproj') }}
+        restore-keys: |
+          ${{ runner.os }}-nuget-
+
     - name: Setup .NET
       uses: actions/setup-dotnet@v4
       with:
@@ -22,48 +30,43 @@ jobs:
       run: dotnet restore
 
     - name: Build
-      run: dotnet build --no-restore --output ./build_artifacts
+      run: dotnet build --no-restore
 
-    - name: Upload build artifacts
-      uses: actions/upload-artifact@v4
+    - name: Publish Build Artifacts
+      uses: actions/upload-artifact@v3
       with:
-        name: build-artifacts
-        path: ./build_artifacts
+        name: build-output
+        path: '**/bin/**'
 
   unit-tests:
     runs-on: ubuntu-latest
     needs: build
 
     steps:
-    - uses: actions/checkout@v4
+    - name: Download Build Artifacts
+      uses: actions/download-artifact@v3
+      with:
+        name: build-output
 
     - name: Setup .NET
       uses: actions/setup-dotnet@v4
       with:
         dotnet-version: 8.0.x
 
-    - name: Download build artifacts
-      uses: actions/download-artifact@v4
-      with:
-        name: build-artifacts
-        path: ./build_artifacts
-
     - name: Run Unit Tests
-      run: dotnet test src/UnitTests/UnitTests.csproj --no-build
+      run: dotnet test src/UnitTests/UnitTests.csproj --no-build --verbosity normal
 
   integration-tests:
     runs-on: ubuntu-latest
-    needs: unit-tests
+    needs: build
 
     services:
       postgres:
         image: postgres:15
         env:
           POSTGRES_USER: testuser
-          POSTGRES_PASSWORD: TestUserPassword720
+          POSTGRES_PASSWORD: TestPassword731
           POSTGRES_DB: testdb
-        ports:
-          - 5432:5432
         options: >-
           --health-cmd="pg_isready -U testuser"
           --health-interval=10s
@@ -71,20 +74,17 @@ jobs:
           --health-retries=5
 
     steps:
-    - uses: actions/checkout@v4
+    - name: Download Build Artifacts
+      uses: actions/download-artifact@v3
+      with:
+        name: build-output
 
     - name: Setup .NET
       uses: actions/setup-dotnet@v4
       with:
         dotnet-version: 8.0.x
 
-    - name: Download build artifacts
-      uses: actions/download-artifact@v4
-      with:
-        name: build-artifacts
-        path: ./build_artifacts
-
     - name: Run Integration Tests
       env:
-        ConnectionStrings__Default: Host=localhost;Port=5432;Database=testdb;Username=testuser;Password=TestUserPassword720
-      run: dotnet test src/IntegrationTests/IntegrationTests.csproj --no-build
+        ConnectionStrings__Default: Host=localhost;Port=5432;Database=testdb;Username=testuser;Password=TestPassword731;
+      run: dotnet test src/IntegrationTests/IntegrationTests.csproj --no-build --verbosity normal
