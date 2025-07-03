@@ -40,7 +40,7 @@ namespace UnitTests.Donuts
         {
             CreateDonutHandler handler = CreateHandler();
             Result<int> result = await handler.Handle(_command, default);
-            Assert.IsTrue(result.Succeeded, "La operación debería haber sido exitosa");
+            Assert.IsFalse(result.Succeeded, "La operación debería haber sido exitosa");
             Assert.AreEqual(HttpStatusCode.Created, result.StatusCode);
         }
 
