@@ -1,5 +1,5 @@
 ﻿using Domain.Services;
-using Infrastructure.EFCore.SqlServer;
+using Infrastructure.EFCore.Postgre;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace Infrastructure
@@ -13,7 +13,7 @@ namespace Infrastructure
         /// <returns></returns>
         public static IServiceCollection AddInfrastructure(this IServiceCollection services)
         {
-            services.AddDbContext<ApplicationDbContext, SqlServerDbContext>();
+            services.AddDbContext<ApplicationDbContext, PostgreDbContext>();
             return services;
         }
     }

@@ -1,8 +1,9 @@
 ﻿using Microsoft.EntityFrameworkCore.Migrations;
+using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 #nullable disable
 
-namespace Infrastructure.EFCore.SqlServer.Migrations
+namespace Infrastructure.EFCore.Postgre.Migrations
 {
     /// <inheritdoc />
     public partial class Initialize : Migration
@@ -14,16 +15,16 @@ namespace Infrastructure.EFCore.SqlServer.Migrations
                 name: "Donuts",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
-                    Description = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: true),
-                    Price = table.Column<decimal>(type: "decimal(5,2)", precision: 5, scale: 2, nullable: false)
+                    Id = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    Name = table.Column<string>(type: "character varying(50)", maxLength: 50, nullable: false),
+                    Description = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: true),
+                    Price = table.Column<decimal>(type: "numeric(5,2)", precision: 5, scale: 2, nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Donuts", x => x.Id);
-                    table.CheckConstraint("CK_Donut_Price", "[Price] >= 0");
+                    table.CheckConstraint("CK_Donut_Price", "Price >= 0");
                 });
         }
 

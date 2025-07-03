@@ -2,19 +2,19 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 
-namespace Infrastructure.EFCore.SqlServer
+namespace Infrastructure.EFCore.Postgre
 {
     /// <summary>
     /// Implementación de sesión de base de datos para Microsoft SQL Server.
     /// </summary>
     /// <param name="configuration"></param>
-    public class SqlServerDbContext(IConfiguration configuration) : ApplicationDbContext
+    public class PostgreDbContext(IConfiguration configuration) : ApplicationDbContext
     {
         private readonly IConfiguration _configuration = configuration;
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            optionsBuilder.UseSqlServer(_configuration.GetConnectionString("Default"));
+            optionsBuilder.UseNpgsql(_configuration.GetConnectionString("Default"));
         }
     }
 }
