@@ -20,7 +20,7 @@ namespace Host.Controllers
         [ProducesResponseType<Result<int>>(StatusCodes.Status201Created)]
         public async Task<IActionResult> Create([FromBody] CreateDonutCommand command)
         {
-            return BuildResponse(await Mediator.Send(command))
+            return BuildResponse(await Mediator.Send(command));
         }
 
         /// <summary>
