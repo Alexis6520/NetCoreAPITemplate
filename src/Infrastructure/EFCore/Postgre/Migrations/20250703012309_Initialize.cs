@@ -24,7 +24,7 @@ namespace Infrastructure.EFCore.Postgre.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Donuts", x => x.Id);
-                    table.CheckConstraint("CK_Donut_Price", "Price >= 0");
+                    table.CheckConstraint("CK_Donut_Price", "\"Price\" >= 0");
                 });
         }
 

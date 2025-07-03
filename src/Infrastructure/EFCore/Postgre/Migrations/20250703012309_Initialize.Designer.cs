@@ -11,7 +11,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Infrastructure.EFCore.Postgre.Migrations
 {
     [DbContext(typeof(PostgreDbContext))]
-    [Migration("20250703005736_Initialize")]
+    [Migration("20250703012309_Initialize")]
     partial class Initialize
     {
         /// <inheritdoc />
@@ -49,7 +49,7 @@ namespace Infrastructure.EFCore.Postgre.Migrations
 
                     b.ToTable("Donuts", t =>
                         {
-                            t.HasCheckConstraint("CK_Donut_Price", "Price >= 0");
+                            t.HasCheckConstraint("CK_Donut_Price", "\"Price\" >= 0");
                         });
                 });
 #pragma warning restore 612, 618

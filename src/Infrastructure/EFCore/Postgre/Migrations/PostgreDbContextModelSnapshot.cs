@@ -46,7 +46,7 @@ namespace Infrastructure.EFCore.Postgre.Migrations
 
                     b.ToTable("Donuts", t =>
                         {
-                            t.HasCheckConstraint("CK_Donut_Price", "Price >= 0");
+                            t.HasCheckConstraint("CK_Donut_Price", "\"Price\" >= 0");
                         });
                 });
 #pragma warning restore 612, 618

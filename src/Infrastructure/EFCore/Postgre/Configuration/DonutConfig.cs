@@ -10,7 +10,7 @@ namespace Infrastructure.EFCore.Postgre.Configuration
         {
             builder.ToTable(t =>
             {
-                t.HasCheckConstraint("CK_Donut_Price", "Price >= 0");
+                t.HasCheckConstraint("CK_Donut_Price", "\"Price\" >= 0");
             });
         }
     }
