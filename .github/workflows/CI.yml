@@ -21,11 +21,8 @@ jobs:
     - name: Restore dependencies
       run: dotnet restore
 
-    - name: Build Unit Tests
-      run: dotnet build src/UnitTests/UnitTests.csproj --no-restore --output ./build_artifacts/UnitTests
-
-    - name: Build Integration Tests
-      run: dotnet build src/IntegrationTests/IntegrationTests.csproj --no-restore --output ./build_artifacts/IntegrationTests
+    - name: Build
+      run: dotnet build --no-restore --output ./build_artifacts
 
     - name: Upload build artifacts
       uses: actions/upload-artifact@v4
@@ -53,8 +50,6 @@ jobs:
           --health-retries=5    
 
     steps:
-    - uses: actions/checkout@v4
-
     - name: Setup .NET
       uses: actions/setup-dotnet@v4
       with:
@@ -65,11 +60,8 @@ jobs:
       with:
         name: build-output
         path: ./build_artifacts
-
-    - name: Run Unit Tests
-      run: dotnet test ./build_artifacts/UnitTests/UnitTests.dll --no-build --no-restore
-
-    - name: Run Integration Tests
+        
+    - name: Run Tests
       env:
         ConnectionStrings__Default: Host=localhost;Port=5432;Database=testdb;Username=testuser;Password=testPassword
-      run: dotnet test ./build_artifacts/IntegrationTests/IntegrationTests.dll --no-build --no-restore
+      run: dotnet test ./build_artifacts --no-build --no-restore
