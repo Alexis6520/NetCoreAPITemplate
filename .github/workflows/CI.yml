@@ -12,14 +12,26 @@ jobs:
 
     steps:
     - uses: actions/checkout@v4
+
     - name: Setup .NET
       uses: actions/setup-dotnet@v4
       with:
         dotnet-version: 8.0.x
+
     - name: Restore dependencies
       run: dotnet restore
-    - name: Build
-      run: dotnet build --no-restore
+
+    - name: Build Unit Tests
+      run: dotnet build src/UnitTests/UnitTests.csproj --no-restore --output ./build_artifacts/UnitTests
+
+    - name: Build Integration Tests
+      run: dotnet build src/IntegrationTests/IntegrationTests.csproj --no-restore --output ./build_artifacts/IntegrationTests
+
+    - name: Upload build artifacts
+      uses: actions/upload-artifact@v4
+      with:
+        name: build-output
+        path: ./build_artifacts
 
   test:
     runs-on: ubuntu-latest
@@ -42,13 +54,22 @@ jobs:
 
     steps:
     - uses: actions/checkout@v4
+
     - name: Setup .NET
       uses: actions/setup-dotnet@v4
       with:
         dotnet-version: 8.0.x
-    - name: Restore dependencies
-      run: dotnet restore
-    - name: Run Tests
+
+    - name: Download build artifacts
+      uses: actions/download-artifact@v4
+      with:
+        name: build-output
+        path: ./build_artifacts
+
+    - name: Run Unit Tests
+      run: dotnet test ./build_artifacts/UnitTests/UnitTests.dll --no-build --no-restore
+
+    - name: Run Integration Tests
       env:
         ConnectionStrings__Default: Host=localhost;Port=5432;Database=testdb;Username=testuser;Password=testPassword
-      run: dotnet test --no-restore
+      run: dotnet test ./build_artifacts/IntegrationTests/IntegrationTests.dll --no-build --no-restore
