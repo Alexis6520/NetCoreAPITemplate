@@ -1,0 +1,19 @@
+﻿using Microsoft.Extensions.DependencyInjection;
+
+namespace Application
+{
+    public static class Startup
+    {
+        public static IServiceCollection AddApplicationServices(this IServiceCollection services)
+        {
+            var assembly = typeof(Startup).Assembly;
+
+            services.AddMediatR(config =>
+            {
+                config.RegisterServicesFromAssembly(assembly);
+            });
+
+            return services;
+        }
+    }
+}
