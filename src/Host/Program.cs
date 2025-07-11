@@ -1,4 +1,5 @@
 using Application;
+using Host.Middlewares;
 using Infrastructure;
 using NLog;
 using NLog.Web;
@@ -31,6 +32,7 @@ try
         app.UseSwaggerUI();
     }
 
+    app.UseExceptionMiddleware();
     app.UseHttpsRedirection();
 
     app.UseAuthorization();
