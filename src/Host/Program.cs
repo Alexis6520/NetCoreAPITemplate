@@ -51,3 +51,5 @@ finally
 {
     LogManager.Shutdown();
 }
+
+public partial class Program { }
