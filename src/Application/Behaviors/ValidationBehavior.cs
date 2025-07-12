@@ -17,14 +17,10 @@ namespace Application.Behaviors
         {
             var responseType = typeof(TResponse);
 
-            if (
-                !responseType.IsGenericType ||
-                responseType.GetGenericTypeDefinition() != typeof(Result<>))
-            {
-                return await next(cancellationToken);
-            }
+            bool isResultType = responseType.IsGenericType &&
+                responseType.GetGenericTypeDefinition() == typeof(Result<>);
 
-            if (_validators.Any())
+            if (isResultType && _validators.Any())
             {
                 Error[] errors = await ValidateAsync(request, cancellationToken);
 
