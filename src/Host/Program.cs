@@ -3,6 +3,7 @@ using Host.Middlewares;
 using Infrastructure;
 using NLog;
 using NLog.Web;
+using Host;
 
 var logger = LogManager.GetCurrentClassLogger();
 
@@ -20,8 +21,7 @@ try
 
     builder.Services.AddControllers();
     // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
-    builder.Services.AddEndpointsApiExplorer();
-    builder.Services.AddSwaggerGen();
+    builder.Services.AddCustomSwagger();
 
     var app = builder.Build();
 
