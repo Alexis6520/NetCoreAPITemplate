@@ -23,5 +23,11 @@ namespace Host.Abstractions
         {
             return StatusCode((int)result.StatusCode, result);
         }
+
+        protected ObjectResult BuildResponse<T>(T value)
+        {
+            var result = new Result<T>(value);
+            return StatusCode((int)result.StatusCode, result);
+        }
     }
 }
