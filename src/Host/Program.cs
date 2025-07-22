@@ -1,4 +1,5 @@
 using Application;
+using Host;
 using Host.Middlewares;
 using Infrastructure;
 using NLog;
@@ -12,14 +13,12 @@ try
 
     builder.Services
         .AddApplicationServices()
-        .AddInfrastructure();
+        .AddInfrastructure()
+        .AddCustomSwagger();
 
     builder.Logging.ClearProviders();
     builder.Host.UseNLog();
     builder.Services.AddControllers();
-    // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
-    builder.Services.AddEndpointsApiExplorer();
-    builder.Services.AddSwaggerGen();
     var app = builder.Build();
 
     // Configure the HTTP request pipeline.
@@ -39,7 +38,7 @@ catch (HostAbortedException) { }
 catch (Exception ex)
 {
     logger.Error("Programa detenido por excepción", ex);
-	throw;
+    throw;
 }
 finally
 {
