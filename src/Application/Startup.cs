@@ -1,4 +1,6 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using Application.Behaviors;
+using FluentValidation;
+using Microsoft.Extensions.DependencyInjection;
 using System.Reflection;
 
 namespace Application
@@ -12,8 +14,10 @@ namespace Application
             services.AddMediatR(config =>
             {
                 config.RegisterServicesFromAssembly(assembly);
+                config.AddOpenBehavior(typeof(ValidationBehavior<,>));
             });
 
+            services.AddValidatorsFromAssembly(assembly);
             return services;
         }
     }
