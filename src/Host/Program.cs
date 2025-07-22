@@ -1,4 +1,5 @@
 using Application;
+using Host.Middlewares;
 using Infrastructure;
 using NLog;
 using NLog.Web;
@@ -28,6 +29,7 @@ try
         app.UseSwaggerUI();
     }
 
+    app.UseMiddleware<ExceptionMiddleware>();
     app.UseHttpsRedirection();
     app.UseAuthorization();
     app.MapControllers();
