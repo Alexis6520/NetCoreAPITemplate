@@ -17,8 +17,8 @@ namespace IntegrationTests.Services
             {
                 if (!_databaseInitialized)
                 {
-                    using var context = CreateContext();
-                    context.Database.Migrate();
+                    //using var context = CreateContext();
+                    //context.Database.Migrate();
                     _databaseInitialized = true;
                 }
             }
