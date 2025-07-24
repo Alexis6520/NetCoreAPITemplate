@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
-VisualStudioVersion = 17.14.36301.6 d17.14
+VisualStudioVersion = 17.14.36301.6
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Domain", "src\Domain\Domain.csproj", "{18467CB8-9D23-46FA-9553-6EAF1AD5BCEA}"
 EndProject
@@ -10,6 +10,10 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Infrastructure", "src\Infrastructure\Infrastructure.csproj", "{D06246CA-4CB6-473E-9095-68F0263F7CD8}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Host", "src\Host\Host.csproj", "{480B4829-849E-40B1-8001-8905C2EAE77E}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{02EA681E-C7D8-13C7-8484-4AC65E1B71E8}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UnitTests", "src\UnitTests\UnitTests.csproj", "{EEE64898-1EEA-47BD-8E7B-6761995A77EF}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -33,9 +37,16 @@ Global
 		{480B4829-849E-40B1-8001-8905C2EAE77E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{480B4829-849E-40B1-8001-8905C2EAE77E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{480B4829-849E-40B1-8001-8905C2EAE77E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EEE64898-1EEA-47BD-8E7B-6761995A77EF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EEE64898-1EEA-47BD-8E7B-6761995A77EF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EEE64898-1EEA-47BD-8E7B-6761995A77EF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EEE64898-1EEA-47BD-8E7B-6761995A77EF}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{EEE64898-1EEA-47BD-8E7B-6761995A77EF} = {02EA681E-C7D8-13C7-8484-4AC65E1B71E8}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {91E4B09C-9655-4FED-AF74-EF9A1DE094D8}
