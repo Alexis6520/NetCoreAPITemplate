@@ -17,8 +17,8 @@ namespace IntegrationTests.Services
             {
                 if (!_databaseInitialized)
                 {
-                    //using var context = CreateContext();
-                    //context.Database.Migrate();
+                    using var context = CreateContext();
+                    context.Database.Migrate();
                     _databaseInitialized = true;
                 }
             }
@@ -34,7 +34,7 @@ namespace IntegrationTests.Services
             builder.UseEnvironment("Testing");
         }
 
-        private static PostgreDbContext CreateContext()
+        private PostgreDbContext CreateContext()
         {
             var configuration = new ConfigurationBuilder()
                 .AddUserSecrets<CustomWebAppFactory>()
