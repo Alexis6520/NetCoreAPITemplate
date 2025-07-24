@@ -19,7 +19,7 @@ namespace IntegrationTests.Services
                 {
                     using var context = CreateContext();
                     context.Database.Migrate();
-                    _databaseInitialized = true;
+                    _databaseInitialized = true; 
                 }
             }
         }
