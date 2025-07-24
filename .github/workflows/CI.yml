@@ -5,38 +5,44 @@ on:
     branches: [ "master" ]
   pull_request:
     branches: [ "master" ]
-
+    
+env:
+  ARTIFACTS: ./build_artifacts
+  
 jobs:
   build:
     runs-on: ubuntu-latest
-
+    
     steps:
-    - uses: actions/checkout@v4
-
-    - name: Setup .NET
-      uses: actions/setup-dotnet@v4
-      with:
-        dotnet-version: 8.0.x
-
-    - name: Restore dependencies
-      run: dotnet restore
-
-    - name: Build Unit Tests
-      run: dotnet build src/UnitTests/UnitTests.csproj --no-restore --output ./build_artifacts/UnitTests
-
-    - name: Build Integration Tests
-      run: dotnet build src/IntegrationTests/IntegrationTests.csproj --no-restore --output ./build_artifacts/IntegrationTests
-
-    - name: Upload build artifacts
-      uses: actions/upload-artifact@v4
-      with:
-        name: build-output
-        path: ./build_artifacts
-
+      - uses: actions/checkout@v4
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 8.0.x
+      - name: Restore dependencies
+        run: dotnet restore
+      - name: Build
+        run: dotnet build --no-restore
+      - name: Create Artifacts
+        run: |
+          UNIT_TESTS="${ARTIFACTS}/UnitTests"
+          INTEGRATION_TESTS="${ARTIFACTS}/IntegrationTests"
+          mkdir -p "$UNIT_TESTS"
+          mkdir -p "$INTEGRATION_TESTS"
+          cp -r src/UnitTests/bin/Debug/net8.0/* "$UNIT_TESTS"/
+          cp -r src/IntegrationTests/bin/Debug/net8.0/* "$INTEGRATION_TESTS"/
+      - name: Upload build artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: build_artifacts
+          path: ${{ env.ARTIFACTS }}
+          
   test:
     runs-on: ubuntu-latest
     needs: build
-
+    env:
+        ConnectionStrings__Default: Host=localhost;Port=5432;Database=testdb;Username=testuser;Password=testPassword
+        
     services:
       postgres:
         image: postgres:15
@@ -50,24 +56,21 @@ jobs:
           --health-cmd="pg_isready -U testuser"
           --health-interval=10s
           --health-timeout=5s
-          --health-retries=5    
-
+          --health-retries=5
+          
     steps:
-    - name: Setup .NET
-      uses: actions/setup-dotnet@v4
-      with:
-        dotnet-version: 8.0.x
-
-    - name: Download build artifacts
-      uses: actions/download-artifact@v4
-      with:
-        name: build-output
-        path: ./build_artifacts
-
-    - name: Run Unit Tests
-      run: dotnet test ./build_artifacts/UnitTests/UnitTests.dll
-
-    - name: Run Integration Tests
-      env:
-        ConnectionStrings__Default: Host=localhost;Port=5432;Database=testdb;Username=testuser;Password=testPassword
-      run: dotnet test ./build_artifacts/IntegrationTests/IntegrationTests.dll
+      - uses: actions/checkout@v4
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 8.0.x
+      - name: Download build artifacts
+        uses: actions/download-artifact@v4.3.0
+        with: 
+          name: build_artifacts
+          path: ${{ env.ARTIFACTS }}
+      - name: Unit Test
+        run: dotnet test ${{ env.ARTIFACTS }}/UnitTests/UnitTests.dll --verbosity normal
+      - name: Integration Test
+        run: dotnet test ${{ env.ARTIFACTS }}/IntegrationTests/IntegrationTests.dll --verbosity normal
+        
