@@ -45,8 +45,8 @@ namespace Application.RP
         }
 
         [JsonIgnore]
-        public HttpStatusCode StatusCode { get; set; }
-        public IEnumerable<Error> Errors { get; set; }
+        public HttpStatusCode StatusCode { get; }
+        public IEnumerable<Error> Errors { get; }
     }
 
     public class Result<T> : Result

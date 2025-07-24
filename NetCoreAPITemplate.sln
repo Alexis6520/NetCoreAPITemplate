@@ -15,6 +15,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{02EA681E
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UnitTests", "src\UnitTests\UnitTests.csproj", "{EEE64898-1EEA-47BD-8E7B-6761995A77EF}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IntegrationTests", "src\IntegrationTests\IntegrationTests.csproj", "{3F70B4A3-F962-44F5-98C9-EC352E8408C9}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -41,12 +43,17 @@ Global
 		{EEE64898-1EEA-47BD-8E7B-6761995A77EF}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{EEE64898-1EEA-47BD-8E7B-6761995A77EF}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{EEE64898-1EEA-47BD-8E7B-6761995A77EF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3F70B4A3-F962-44F5-98C9-EC352E8408C9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3F70B4A3-F962-44F5-98C9-EC352E8408C9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3F70B4A3-F962-44F5-98C9-EC352E8408C9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3F70B4A3-F962-44F5-98C9-EC352E8408C9}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{EEE64898-1EEA-47BD-8E7B-6761995A77EF} = {02EA681E-C7D8-13C7-8484-4AC65E1B71E8}
+		{3F70B4A3-F962-44F5-98C9-EC352E8408C9} = {02EA681E-C7D8-13C7-8484-4AC65E1B71E8}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {91E4B09C-9655-4FED-AF74-EF9A1DE094D8}
