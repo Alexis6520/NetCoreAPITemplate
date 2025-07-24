@@ -34,9 +34,10 @@ namespace IntegrationTests.Services
             builder.UseEnvironment("Testing");
         }
 
-        private PostgreDbContext CreateContext()
+        private static PostgreDbContext CreateContext()
         {
             var configuration = new ConfigurationBuilder()
+                .AddEnvironmentVariables()
                 .AddUserSecrets<CustomWebAppFactory>()
                 .Build();
 
