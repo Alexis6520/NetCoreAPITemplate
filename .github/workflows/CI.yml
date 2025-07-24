@@ -62,5 +62,7 @@ jobs:
         with: 
           name: build_artifacts
           path: ${{ env.ARTIFACTS }}
-      - name: Test
-        run: dotnet test ${{ env.ARTIFACTS }} --no-build --verbosity normal
+      - name: Run Unit Test
+        run: dotnet test ${{ env.ARTIFACTS }}/UnitTests/UnitTests.dll --no-build --verbosity normal
+      - name: Run Integration Test
+        run: dotnet test ${{ env.ARTIFACTS }}/IntegrationTests/IntegrationTests.dll --no-build --verbosity normal
