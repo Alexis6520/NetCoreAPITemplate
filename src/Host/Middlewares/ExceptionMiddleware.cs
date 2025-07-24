@@ -14,6 +14,7 @@ namespace Host.Middlewares
             {
                 await _next(context);
             }
+            catch (TaskCanceledException) { }
             catch (Exception ex)
             {
                 logger.LogError(ex, "Excepción no controlada");
