@@ -1,0 +1,4 @@
+<Solution>
+  <Project Path="src/Host/Host.csproj" />
+  <Project Path="src/Persistence/Persistence.csproj" />
+</Solution>

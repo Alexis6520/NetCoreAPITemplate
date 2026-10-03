@@ -1,0 +1,10 @@
+services:
+  db:
+    image: postgres:18
+    container_name: krispy_db
+    environment:
+      POSTGRES_USER: krispy
+      POSTGRES_PASSWORD: kreme
+      POSTGRES_DB: krispy_kreme
+    ports:
+      - "5432:5432"
