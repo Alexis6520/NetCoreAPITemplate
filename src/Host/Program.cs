@@ -1,9 +1,9 @@
+using Host;
 using Host.Mediation;
 using Persistence;
 using Scalar.AspNetCore;
 using Serilog;
-using Serilog.Templates;
-using Serilog.Templates.Themes;
+using Host.Middlewares;
 
 Log.Logger = new LoggerConfiguration()
     .WriteTo.Console()
@@ -17,20 +17,8 @@ try
     builder.Services
         .AddPersistence()
         .AddMediation()
-        .AddSerilog((services, lc) =>
-        {
-            lc.ReadFrom.Configuration(builder.Configuration)
-            .ReadFrom.Services(services)
-            .Enrich.FromLogContext()
-            .WriteTo.Console(
-                new ExpressionTemplate(
-                    // Include trace and span ids when present.
-                    "[{@t:HH:mm:ss} {@l:u3}{#if SourceContext is not null} {Substring(SourceContext, LastIndexOf(SourceContext, '.') + 1)}{#end}" +
-                    "{#if @tr is not null} ({substring(@tr,0,4)}:{substring(@sp,0,4)}){#end}] {@m}\n{@x}",
-                    theme: TemplateTheme.Code
-                )
-            );
-        });
+        .AddCustomSerilog(builder.Configuration)
+        .AddProblemDetails();
 
     builder.Services.AddControllers();
     // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
@@ -46,15 +34,14 @@ try
     }
 
     app.UseSerilogRequestLogging();
-
+    app.UseExceptionMiddleware();
     app.UseHttpsRedirection();
-
     app.UseAuthorization();
-
     app.MapControllers();
 
     app.Run();
 }
+catch (HostAbortedException) { }
 catch(Exception ex)
 {
     Log.Fatal(ex, "Application terminated unexpectedly");

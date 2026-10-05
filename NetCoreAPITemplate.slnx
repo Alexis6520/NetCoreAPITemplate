@@ -1,4 +1,8 @@
 <Solution>
+  <Folder Name="/Tests/">
+    <Project Path="IntegrationTests/IntegrationTests.csproj" Id="5da2d6a8-307f-49e8-96f8-f09fdc6be120" />
+    <Project Path="UnitTests/UnitTests.csproj" Id="8d526532-f160-4a9b-b8ff-f5e125312d87" />
+  </Folder>
   <Project Path="src/Host/Host.csproj" />
   <Project Path="src/Persistence/Persistence.csproj" />
 </Solution>
