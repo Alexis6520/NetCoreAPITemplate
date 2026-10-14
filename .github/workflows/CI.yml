@@ -65,6 +65,8 @@ jobs:
           POSTGRES_USER: krispy
           POSTGRES_PASSWORD: kreme
           POSTGRES_DB: krispy_kreme_test
+        ports:
+          - 5432:5432
         options: >-
           --health-cmd pg_isready
           --health-interval 10s
