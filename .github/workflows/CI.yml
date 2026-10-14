@@ -47,3 +47,36 @@ jobs:
           name: tests-artifacts
       - name: Run tests
         run: dotnet test ./UnitTests/bin/Debug/net10.0/UnitTests.dll
+
+  integration-test:
+
+    runs-on: ubuntu-latest   
+    needs: build
+
+    services:
+      # Label used to access the service container
+      postgres:
+        # Docker Hub image
+        image: postgres:18
+        # Provide the password for postgres
+        env:
+          POSTGRES_USER: krispy
+          POSTGRES_PASSWORD: kreme
+          POSTGRES_DB: krispy_kreme_test
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+  
+    steps:
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: ${{env.dotnetver}}
+      - name: Download artifacts
+        uses: actions/download-artifact@v8
+        with:
+          name: tests-artifacts
+      - name: Run tests
+        run: dotnet test ./IntegrationTests/bin/Debug/net10.0/IntegrationTests.dll
