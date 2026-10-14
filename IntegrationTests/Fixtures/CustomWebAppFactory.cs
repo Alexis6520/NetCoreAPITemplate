@@ -87,6 +87,7 @@ public class CustomWebAppFactory : WebApplicationFactory<Program>, IAsyncLifetim
 
     protected override IHost CreateHost(IHostBuilder builder)
     {
+        // Esto previene un error que se puede dar al ejecutar las pruebas en un entorno CI/CD, donde el directorio actual puede no ser el mismo que el del proyecto.
         builder.UseContentRoot(Directory.GetCurrentDirectory());
         return base.CreateHost(builder);
     }
