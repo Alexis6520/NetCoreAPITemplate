@@ -17,22 +17,7 @@ jobs:
       uses: actions/setup-dotnet@v4
       with:
         dotnet-version: 10.0.x
-    - name: Restore cached dependencies
-      id: cache-dependencies-restore
-      uses: actions/cache/restore@v6
-      with:
-        path: ~/.nuget/packages
-        key: ${{ runner.os }}-nuget-${{ hashFiles('**/packages.lock.json') }}
-        restore-keys: |
-          ${{ runner.os }}-nuget-
     - name: Restore dependencies
-      if: steps.cache-dependencies-restore.outputs.cache-hit != 'true'
       run: dotnet restore --verbosity detailed
-    - name: Save dependencies
-      if: steps.cache-dependencies-restore.outputs.cache-hit != 'true'
-      uses: actions/cache/save@v6
-      with:
-        path: ~/.nuget/packages
-        key: ${{ steps.cache-dependencies-restore.outputs.cache-primary-key }}
     - name: Build
       run: dotnet build --no-restore
