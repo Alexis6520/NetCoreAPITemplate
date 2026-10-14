@@ -27,7 +27,7 @@ jobs:
           ${{ runner.os }}-nuget-
     - name: Restore dependencies
       if: steps.cache-dependencies-restore.outputs.cache-hit != 'true'
-      run: dotnet restore
+      run: dotnet restore --verbosity detailed
     - name: Save dependencies
       if: steps.cache-dependencies-restore.outputs.cache-hit != 'true'
       uses: actions/cache/save@v6
