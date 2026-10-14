@@ -6,7 +6,7 @@ namespace IntegrationTests.Abstractions;
 
 public abstract class BaseTest(CustomWebAppFactory factory) : IClassFixture<CustomWebAppFactory>, IDisposable
 {
-    private readonly IServiceScope _scope = factory.Services.CreateScope();
+    private IServiceScope? _scope;
     private ApplicationDbContext? _dbContext;
 
     protected CustomWebAppFactory Factory { get; } = factory;
@@ -14,12 +14,18 @@ public abstract class BaseTest(CustomWebAppFactory factory) : IClassFixture<Cust
     protected static CancellationToken CancellationToken => TestContext.Current.CancellationToken;
 
     protected ApplicationDbContext DbContext =>
-        _dbContext ??= _scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+        _dbContext ??= GetService<ApplicationDbContext>();
 
     public void Dispose()
     {
         _dbContext?.Dispose();
-        _scope.Dispose();
+        _scope?.Dispose();
         GC.SuppressFinalize(this);
+    }
+
+    protected T GetService<T>() where T : notnull
+    {
+        _scope ??= Factory.Services.CreateScope();
+        return _scope.ServiceProvider.GetRequiredService<T>();
     }
 }
