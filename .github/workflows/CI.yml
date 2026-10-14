@@ -23,12 +23,8 @@ jobs:
       uses: actions/setup-dotnet@v4
       with:
         dotnet-version: ${{env.dotnetver}}
-    - name: Restore dependencies
-      run: dotnet restore
     - name: Build
-      run: |
-        dotnet build -c Release --no-restore UnitTests/UnitTests.csproj
-        dotnet build -c Release --no-restore IntegrationTests/IntegrationTests.csproj
+      run: dotnet build -c Release
     - name: 'Tar files'
       run: tar -cvf ${{env.tar_file}} ${{env.unit_test_dir}} ${{env.integration_test_dir}}
     - name: Upload artifacts
