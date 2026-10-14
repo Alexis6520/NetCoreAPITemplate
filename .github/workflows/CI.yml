@@ -23,8 +23,12 @@ jobs:
       uses: actions/setup-dotnet@v4
       with:
         dotnet-version: ${{env.dotnetver}}
+    - name: Restore dependencies
+      run: dotnet restore
     - name: Build
-      run: dotnet build -c Release
+      run: |
+        dotnet build -c Release --no-restore ${{env.unit_test_dir}}/UnitTests.csproj
+        dotnet build -c Release --no-restore ${{env.integration_test_dir}}/IntegrationTests.csproj
     - name: 'Tar files'
       run: tar -cvf ${{env.tar_file}} ${{env.unit_test_dir}} ${{env.integration_test_dir}}
     - name: Upload artifacts
@@ -52,6 +56,7 @@ jobs:
         run: tar -xvf ${{env.tar_file}}
       - name: Run tests
         run: dotnet test ${{env.unit_test_dir}}/UnitTests.dll
+        
   integration-test:
 
     runs-on: ubuntu-latest   
@@ -84,4 +89,4 @@ jobs:
       - name: Untar files
         run: tar -xvf ${{env.tar_file}}
       - name: Run tests
-        run: dotnet test ${{env.integration_test_dir}}/IntegrationTests.dll --logger "console;verbosity=detailed"
+        run: dotnet test ${{env.integration_test_dir}}/IntegrationTests.dll
