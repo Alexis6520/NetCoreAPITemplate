@@ -89,4 +89,4 @@ jobs:
       - name: Untar files
         run: tar -xvf ${{env.tar_file}}
       - name: Run tests
-        run: dotnet test ${{env.integration_test_dir}}/IntegrationTests.dll
+        run: dotnet test --no-build ${{env.integration_test_dir}}/IntegrationTests.dll
