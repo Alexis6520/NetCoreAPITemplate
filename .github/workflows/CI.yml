@@ -8,6 +8,9 @@ on:
 
 env:
   dotnetver: 10.0.x
+  unit_test_dir: UnitTests/bin/Debug/net10.0/
+  integration_test_dir: IntegrationTests/bin/Debug/net10.0/
+  tar_file: test_files.tar
 
 jobs:
   build:
@@ -22,14 +25,14 @@ jobs:
         dotnet-version: ${{env.dotnetver}}
     - name: Build
       run: dotnet build
+    - name: 'Tar files'
+      run: tar -cvf ${{env.tar_file}} ${{env.unit_test_dir}} ${{env.integration_test_dir}}
     - name: Upload artifacts
       uses: actions/upload-artifact@v7
       with:
-        name: tests-artifacts
         retention-days: 5
-        path: |
-          ./UnitTests/bin/Debug/net10.0/
-          ./IntegrationTests/bin/Debug/net10.0/
+        path: ${{env.tar_file}}
+        archive: false
 
   unit-test:
 
@@ -44,9 +47,11 @@ jobs:
       - name: Download artifacts
         uses: actions/download-artifact@v8
         with:
-          name: tests-artifacts
+          name: ${{env.tar_file}}
+      - name: Untar files
+        run: tar -xvf ${{env.tar_file}}
       - name: Run tests
-        run: dotnet test UnitTests/bin/Debug/net10.0/UnitTests.dll
+        run: dotnet test ${{env.unit_test_dir}}
 
   integration-test:
 
@@ -77,6 +82,8 @@ jobs:
       - name: Download artifacts
         uses: actions/download-artifact@v8
         with:
-          name: tests-artifacts
+          name: ${{env.tar_file}}
+      - name: Untar files
+        run: tar -xvf ${{env.tar_file}}
       - name: Run tests
-        run: dotnet test IntegrationTests/bin/Debug/net10.0/IntegrationTests.dll
+        run: dotnet test ${{env.integration_test_dir}}
