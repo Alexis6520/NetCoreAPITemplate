@@ -27,3 +27,15 @@ jobs:
         path: |
           ./UnitTests/bin/Debug/net10.0/
           ./IntegrationTests/bin/Debug/net10.0
+
+  unit-test:
+
+    runs-on: ubuntu-latest    
+
+    steps:
+      - name: Download artifacts
+        uses: actions/download-artifact@v8
+        with:
+          name: tests-artifacts
+      - name: Display structure of downloaded files
+        run: ls -R
