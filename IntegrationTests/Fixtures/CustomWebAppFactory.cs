@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 using Npgsql;
 using Persistence;
 using System.Data.Common;
@@ -82,5 +83,11 @@ public class CustomWebAppFactory : WebApplicationFactory<Program>, IAsyncLifetim
 
         builder.UseEnvironment("Development");
         builder.UseConfiguration(_config);
+    }
+
+    protected override IHost CreateHost(IHostBuilder builder)
+    {
+        builder.UseContentRoot(Directory.GetCurrentDirectory());
+        return base.CreateHost(builder);
     }
 }
