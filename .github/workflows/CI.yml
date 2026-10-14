@@ -30,7 +30,8 @@ jobs:
 
   unit-test:
 
-    runs-on: ubuntu-latest    
+    runs-on: ubuntu-latest   
+    needs: build
 
     steps:
       - name: Download artifacts
