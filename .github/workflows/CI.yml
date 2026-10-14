@@ -28,5 +28,11 @@ jobs:
     - name: Restore dependencies
       if: steps.cache-dependencies-restore.outputs.cache-hit != 'true'
       run: dotnet restore
+    - name: Save dependencies
+      if: steps.cache-dependencies-restore.outputs.cache-hit != 'true'
+      uses: actions/cache/save@v6
+      with:
+        path: ~/.nuget/packages
+        key: ${{ steps.cache-dependencies-restore.outputs.cache-primary-key }}
     - name: Build
       run: dotnet build --no-restore
