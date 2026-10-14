@@ -46,7 +46,7 @@ jobs:
         with:
           name: tests-artifacts
       - name: Run tests
-        run: dotnet test ./UnitTests/bin/Debug/net10.0/UnitTests.dll
+        run: dotnet test UnitTests/bin/Debug/net10.0/UnitTests.dll
 
   integration-test:
 
@@ -79,4 +79,4 @@ jobs:
         with:
           name: tests-artifacts
       - name: Run tests
-        run: dotnet test ./IntegrationTests/bin/Debug/net10.0/IntegrationTests.dll
+        run: dotnet test IntegrationTests/bin/Debug/net10.0/IntegrationTests.dll
