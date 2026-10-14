@@ -8,8 +8,8 @@ on:
 
 env:
   dotnetver: 10.0.x
-  unit_test_dir: UnitTests/bin/Debug/net10.0
-  integration_test_dir: IntegrationTests/bin/Debug/net10.0
+  unit_test_dir: UnitTests/bin/Release/net10.0
+  integration_test_dir: IntegrationTests/bin/Release/net10.0
   tar_file: test_files.tar
 
 jobs:
@@ -24,7 +24,7 @@ jobs:
       with:
         dotnet-version: ${{env.dotnetver}}
     - name: Build
-      run: dotnet build
+      run: dotnet build -c Release
     - name: 'Tar files'
       run: tar -cvf ${{env.tar_file}} ${{env.unit_test_dir}} ${{env.integration_test_dir}}
     - name: Upload artifacts
