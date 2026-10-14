@@ -27,8 +27,8 @@ jobs:
       run: dotnet restore
     - name: Build
       run: |
-        dotnet build -c Release --no-restore ${{env.unit_test_dir}}/UnitTests.csproj
-        dotnet build -c Release --no-restore ${{env.integration_test_dir}}/IntegrationTests.csproj
+        dotnet build -c Release --no-restore UnitTests/UnitTests.csproj
+        dotnet build -c Release --no-restore IntegrationTests/IntegrationTests.csproj
     - name: 'Tar files'
       run: tar -cvf ${{env.tar_file}} ${{env.unit_test_dir}} ${{env.integration_test_dir}}
     - name: Upload artifacts
