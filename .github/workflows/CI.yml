@@ -51,7 +51,7 @@ jobs:
       - name: Untar files
         run: tar -xvf ${{env.tar_file}}
       - name: Run tests
-        run: dotnet test ${{env.unit_test_dir}}
+        run: dotnet test ${{env.unit_test_dir}}/UnitTests.dll
   integration-test:
 
     runs-on: ubuntu-latest   
@@ -84,4 +84,4 @@ jobs:
       - name: Untar files
         run: tar -xvf ${{env.tar_file}}
       - name: Run tests
-        run: dotnet test ${{env.integration_test_dir}}
+        run: dotnet test ${{env.integration_test_dir}}/IntegrationTests.dll
