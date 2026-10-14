@@ -8,8 +8,9 @@ on:
 
 env:
   dotnetver: 10.0.x
-  unit_test_dir: UnitTests/bin/Release/net10.0
-  integration_test_dir: IntegrationTests/bin/Release/net10.0
+  unit_test_dir: UnitTests
+  integration_test_dir: IntegrationTests
+  artifact_dir: artifacts
   tar_file: test_files.tar
 
 jobs:
@@ -23,10 +24,14 @@ jobs:
       uses: actions/setup-dotnet@v4
       with:
         dotnet-version: ${{env.dotnetver}}
+    - name: Restore dependencies
+      run: dotnet restore
     - name: Build
-      run: dotnet build -c Release
+      run: |
+        dotnet build UnitTests -c Release --no-restore --output ${{env.artifact_dir}}/${{env.unit_test_dir}}
+        dotnet build IntegrationTests -c Release --no-restore --output ${{env.artifact_dir}}/${{env.integration_test_dir}}
     - name: 'Tar files'
-      run: tar -cvf ${{env.tar_file}} ${{env.unit_test_dir}} ${{env.integration_test_dir}}
+      run: tar -cvf ${{env.tar_file}} ${{env.artifact_dir}}
     - name: Upload artifacts
       uses: actions/upload-artifact@v7
       with:
@@ -51,7 +56,7 @@ jobs:
       - name: Untar files
         run: tar -xvf ${{env.tar_file}}
       - name: Run tests
-        run: dotnet test ${{env.unit_test_dir}}/UnitTests.dll
+        run: dotnet test ${{env.artifact_dir}}/${{env.unit_test_dir}}/UnitTests.dll
         
   integration-test:
 
@@ -85,4 +90,4 @@ jobs:
       - name: Untar files
         run: tar -xvf ${{env.tar_file}}
       - name: Run tests
-        run: dotnet test ${{env.integration_test_dir}}/IntegrationTests.dll --environment ASPNETCORE_ENVIRONMENT="Development"
+        run: dotnet test ${{env.artifact_dir}}/${{env.integration_test_dir}}/IntegrationTests.dll
