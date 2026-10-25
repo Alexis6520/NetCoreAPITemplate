@@ -12,7 +12,14 @@ public class DonutsController(DonutUseCases donutUseCases) : ControllerBase
 {
     private readonly DonutUseCases _useCases = donutUseCases;
 
+    /// <summary>
+    /// Crea una donita del krispy kreme.
+    /// </summary>
+    /// <param name="request">Datos necesarios para crear la donita.</param>
+    /// <param name="cancellationToken">Token para cancelar la operación de forma asíncrona.</param>
+    /// <returns>Resultado de la acción con el identificador de la dona creada.</returns>
     [HttpPost]
+    [ProducesResponseType<Response<int>>(StatusCodes.Status201Created)]
     public async Task<IActionResult> Create(CreateDonutRequest request, CancellationToken cancellationToken)
     {
         int id = await _useCases.Create
@@ -21,7 +28,13 @@ public class DonutsController(DonutUseCases donutUseCases) : ControllerBase
         return Created((string?)null, new Response<int>(id));
     }
 
+    /// <summary>
+    /// Obtiene una lista de donitas del krispy kreme.
+    /// </summary>
+    /// <param name="cancellationToken">Token para cancelar la operación de forma asíncrona.</param>
+    /// <returns>Lista de donitas disponibles.</returns>
     [HttpGet]
+    [ProducesResponseType<Response<Donut[]>>(StatusCodes.Status200OK)]
     public async Task<IActionResult> GetAll(CancellationToken cancellationToken)
     {
         var donuts = await _useCases.GetList
